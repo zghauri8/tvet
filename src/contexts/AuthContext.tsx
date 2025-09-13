@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (storedToken) {
           // Verify token with backend
           const response = await fetch(
-            "http://localhost:3001/api/auth/verify",
+            `https://tvet-production.up.railway.app/api/auth/verify`,
             {
               method: "POST",
               headers: {
@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch("http://localhost:3001/api/auth/login", {
+      const response = await fetch(`https://tvet-production.up.railway.app/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     role: string
   ) => {
     try {
-      const response = await fetch("http://localhost:3001/api/auth/signup", {
+      const response = await fetch(`https://tvet-production.up.railway.app/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
