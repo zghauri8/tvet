@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Menu,
   X,
-  Brain,
+  Target,
   Users,
   BarChart3,
   CreditCard,
@@ -24,7 +24,7 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { name: "Features", href: "#features", icon: Brain },
+    { name: "Features", href: "#features", icon: Target },
     { name: "For Students", href: "#students", icon: Users },
     { name: "For Employers", href: "#employers", icon: BarChart3 },
     { name: "Pricing", href: "#pricing", icon: CreditCard },
@@ -37,7 +37,7 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
+              <Target className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
               FitFind

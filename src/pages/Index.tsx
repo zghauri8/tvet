@@ -382,7 +382,7 @@ const Index = () => {
       <footer className="py-12 bg-foreground text-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
-            <Brain className="w-8 h-8 text-primary" />
+            <Target className="w-8 h-8 text-primary" />
             <span className="text-2xl font-bold">FitFind</span>
           </div>
           <p className="text-muted-foreground mb-4">
