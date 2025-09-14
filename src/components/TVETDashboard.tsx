@@ -20,17 +20,14 @@ export default function TVETDashboard() {
 
   const handleLogout = () => {
     logout();
-    window.location.href = "/";
   };
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
-          <p className="text-muted-foreground mb-6">
-            Please log in to access your dashboard.
-          </p>
+          <h1 className="text-2xl font-bold text-white mb-4">Loading...</h1>
+          <p className="text-purple-300">Please wait while we load your dashboard.</p>
         </div>
       </div>
     );
@@ -85,105 +82,112 @@ export default function TVETDashboard() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* User Profile Card */}
-          <div className="lg:col-span-2">
-            <div className="relative p-8 bg-slate-800/50 backdrop-blur-sm rounded-lg">
+        {/* User Profile Card - Full Width */}
+        <div className="mb-8">
+          <div className="relative p-8 bg-slate-800/50 backdrop-blur-sm rounded-lg">
+            {/* Gradient Border */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px]">
+              <div className="w-full h-full bg-slate-800/50 rounded-lg"></div>
+            </div>
+            
+            <div className="relative flex items-center space-x-6">
+              <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center">
+                <User className="w-10 h-10 text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white mb-2">{user.name}</h2>
+                <p className="text-gray-300 mb-4">{user.email}</p>
+              </div>
+              <div className="flex flex-col space-y-3">
+                <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-lg px-6 py-2">
+                  Upgrade Plan
+                </Button>
+                <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-lg px-6 py-2">
+                  Cancel Plan
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Grid - Usage and Refer a Friend */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Your Usage - Left Side */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-4">Your Usage</h3>
+            <div className="relative p-6 bg-slate-800/50 backdrop-blur-sm rounded-lg">
               {/* Gradient Border */}
               <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px]">
                 <div className="w-full h-full bg-slate-800/50 rounded-lg"></div>
               </div>
               
-              <div className="relative flex items-center space-x-6">
-                <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center">
-                  <User className="w-10 h-10 text-white" />
+              <div className="relative space-y-4">
+                <div>
+                  <div className="flex justify-between text-sm text-white mb-2">
+                    <span>Remaining AI Words</span>
+                    <span>0/100000</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-1">
+                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style={{width: '0%'}}></div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-white mb-2">{user.name}</h2>
-                  <p className="text-gray-300 mb-4">{user.email}</p>
+                
+                <div>
+                  <div className="flex justify-between text-sm text-white mb-2">
+                    <span>Remaining AI Chats</span>
+                    <span>0/500</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-1">
+                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style={{width: '0%'}}></div>
+                  </div>
                 </div>
-                <div className="flex flex-col space-y-3">
-                  <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-lg px-6 py-2">
-                    Upgrade Plan
-                  </Button>
-                  <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-lg px-6 py-2">
-                    Cancel Plan
-                  </Button>
+                
+                <div>
+                  <div className="flex justify-between text-sm text-white mb-2">
+                    <span>Remaining Image Prompts</span>
+                    <span>0/0</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-1">
+                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style={{width: '0%'}}></div>
+                  </div>
+                </div>
+                
+                <div>
+                  <div className="flex justify-between text-sm text-white mb-2">
+                    <span>Remaining Voice Counts</span>
+                    <span>0/100</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-1">
+                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style={{width: '0%'}}></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Usage Stats */}
-          <div className="space-y-6">
-            {/* Your Usage */}
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-4">Your Usage</h3>
-              <Card className="p-6 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-500/30 backdrop-blur-sm">
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between text-sm text-purple-200 mb-2">
-                      <span>Remaining AI Words</span>
-                      <span>0/100000</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between text-sm text-purple-200 mb-2">
-                      <span>Remaining AI Chats</span>
-                      <span>0/500</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between text-sm text-purple-200 mb-2">
-                      <span>Remaining Image Prompts</span>
-                      <span>0/0</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between text-sm text-purple-200 mb-2">
-                      <span>Remaining Voice Counts</span>
-                      <span>0/100</span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
-                    </div>
-                  </div>
+          {/* Refer a Friend - Right Side */}
+          <div>
+            <h3 className="text-lg font-semibold text-white mb-4">Refer a Friend</h3>
+            <div className="relative p-6 bg-slate-800/50 backdrop-blur-sm rounded-lg">
+              {/* Gradient Border */}
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px]">
+                <div className="w-full h-full bg-slate-800/50 rounded-lg"></div>
+              </div>
+              
+              <div className="relative text-left">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-green-400 rounded-full flex items-center justify-center mb-4 border-2 border-blue-300/50">
+                  <Wallet className="w-6 h-6 text-white mr-1" />
+                  <Plus className="w-4 h-4 text-white" />
                 </div>
-              </Card>
-            </div>
-
-            {/* Refer a Friend */}
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-4">Refer a Friend</h3>
-              <Card className="p-6 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-500/30 backdrop-blur-sm">
-                <div className="text-left">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-green-400 rounded-full flex items-center justify-center mb-4 border-2 border-blue-300/50">
-                    <Wallet className="w-6 h-6 text-white mr-1" />
-                    <Plus className="w-4 h-4 text-white" />
-                  </div>
-                  <h4 className="text-2xl font-bold text-white mb-2">Earn 15%</h4>
-                  <p className="text-white font-semibold mb-4">Recurring Commission Forever</p>
-                  <p className="text-sm text-white mb-6">
-                    Earn 15% recurring (that's forever) commission for referring friends to FitFind.
-                  </p>
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
-                    Refer Now
-                  </Button>
-                </div>
-              </Card>
+                <h4 className="text-2xl font-bold text-white mb-2">Earn 15%</h4>
+                <p className="text-white font-semibold mb-4">Recurring Commission Forever</p>
+                <p className="text-sm text-white mb-6">
+                  Earn 15% recurring (that's forever) commission for referring friends to FitFind.
+                </p>
+                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
+                  Refer Now
+                </Button>
+              </div>
             </div>
           </div>
         </div>
