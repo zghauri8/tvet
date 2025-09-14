@@ -164,17 +164,17 @@ export default function TVETDashboard() {
             <div>
               <h3 className="text-lg font-semibold text-white mb-4">Refer a Friend</h3>
               <Card className="p-6 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-500/30 backdrop-blur-sm">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="text-left">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-green-400 rounded-full flex items-center justify-center mb-4 border-2 border-blue-300/50">
                     <Wallet className="w-6 h-6 text-white mr-1" />
                     <Plus className="w-4 h-4 text-white" />
                   </div>
                   <h4 className="text-2xl font-bold text-white mb-2">Earn 15%</h4>
-                  <p className="text-purple-200 mb-4">Recurring Commission Forever</p>
-                  <p className="text-sm text-purple-300 mb-6">
+                  <p className="text-white font-semibold mb-4">Recurring Commission Forever</p>
+                  <p className="text-sm text-white mb-6">
                     Earn 15% recurring (that's forever) commission for referring friends to FitFind.
                   </p>
-                  <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
+                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg">
                     Refer Now
                   </Button>
                 </div>
