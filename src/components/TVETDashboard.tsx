@@ -11,7 +11,8 @@ import {
   Target,
   Users,
   Gift,
-  Wallet
+  Wallet,
+  Plus
 } from "lucide-react";
 
 export default function TVETDashboard() {
@@ -43,7 +44,7 @@ export default function TVETDashboard() {
           {/* Logo */}
           <div className="flex items-center space-x-2 mb-8">
             <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-white" />
+              <div className="w-4 h-4 border-2 border-white rounded-full"></div>
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               FitFind
@@ -57,7 +58,7 @@ export default function TVETDashboard() {
             </div>
             
             <Button className="w-full justify-start bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
-              <Target className="w-4 h-4 mr-3" />
+              <div className="w-4 h-4 border-2 border-white rounded-full mr-3"></div>
               Dashboard
             </Button>
             
@@ -96,7 +97,7 @@ export default function TVETDashboard() {
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-white mb-2">{user.name}</h2>
                   <p className="text-purple-200 mb-4">{user.email}</p>
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col space-y-3">
                     <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
                       Upgrade Plan
                     </Button>
@@ -121,7 +122,9 @@ export default function TVETDashboard() {
                       <span>Remaining AI Words</span>
                       <span>0/100000</span>
                     </div>
-                    <Progress value={0} className="h-2" />
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
+                    </div>
                   </div>
                   
                   <div>
@@ -129,7 +132,9 @@ export default function TVETDashboard() {
                       <span>Remaining AI Chats</span>
                       <span>0/500</span>
                     </div>
-                    <Progress value={0} className="h-2" />
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
+                    </div>
                   </div>
                   
                   <div>
@@ -137,7 +142,9 @@ export default function TVETDashboard() {
                       <span>Remaining Image Prompts</span>
                       <span>0/0</span>
                     </div>
-                    <Progress value={0} className="h-2" />
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
+                    </div>
                   </div>
                   
                   <div>
@@ -145,7 +152,9 @@ export default function TVETDashboard() {
                       <span>Remaining Voice Counts</span>
                       <span>0/100</span>
                     </div>
-                    <Progress value={0} className="h-2" />
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{width: '0%'}}></div>
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -157,7 +166,8 @@ export default function TVETDashboard() {
               <Card className="p-6 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-500/30 backdrop-blur-sm">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Wallet className="w-8 h-8 text-white" />
+                    <Wallet className="w-6 h-6 text-white mr-1" />
+                    <Plus className="w-4 h-4 text-white" />
                   </div>
                   <h4 className="text-2xl font-bold text-white mb-2">Earn 15%</h4>
                   <p className="text-purple-200 mb-4">Recurring Commission Forever</p>
