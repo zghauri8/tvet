@@ -89,25 +89,30 @@ export default function TVETDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Profile Card */}
           <div className="lg:col-span-2">
-            <Card className="p-8 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-purple-500/30 backdrop-blur-sm">
-              <div className="flex items-center space-x-6">
+            <div className="relative p-8 bg-slate-800/50 backdrop-blur-sm rounded-lg">
+              {/* Gradient Border */}
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px]">
+                <div className="w-full h-full bg-slate-800/50 rounded-lg"></div>
+              </div>
+              
+              <div className="relative flex items-center space-x-6">
                 <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center">
                   <User className="w-10 h-10 text-white" />
                 </div>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-white mb-2">{user.name}</h2>
-                  <p className="text-purple-200 mb-4">{user.email}</p>
-                  <div className="flex flex-col space-y-3">
-                    <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
-                      Upgrade Plan
-                    </Button>
-                    <Button variant="outline" className="border-purple-500/50 text-purple-300 hover:bg-purple-500/20">
-                      Cancel Plan
-                    </Button>
-                  </div>
+                  <p className="text-gray-300 mb-4">{user.email}</p>
+                </div>
+                <div className="flex flex-col space-y-3">
+                  <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-lg px-6 py-2">
+                    Upgrade Plan
+                  </Button>
+                  <Button className="bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-600 hover:to-blue-600 text-white rounded-lg px-6 py-2">
+                    Cancel Plan
+                  </Button>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
 
           {/* Usage Stats */}
