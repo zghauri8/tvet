@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import TVETDashboard from "../components/TVETDashboard";
 import {
   User,
   Mail,
@@ -36,6 +37,11 @@ export default function DashboardView() {
         </div>
       </div>
     );
+  }
+
+  // Show TVET Dashboard for TVET students
+  if (user.role === 'TVET_STUDENT') {
+    return <TVETDashboard />;
   }
 
   const stats = [

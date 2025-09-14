@@ -48,7 +48,7 @@ export default function SignupView() {
       );
 
       if (result.success) {
-        navigate("/dashboard");
+        navigate("/login");
       } else {
         setSubmitError(result.error || "An error occurred");
       }
