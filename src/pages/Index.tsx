@@ -18,6 +18,8 @@ import {
   Zap,
   BarChart3,
   Shield,
+  User,
+  Brain,
 } from "lucide-react";
 
 const Index = () => {

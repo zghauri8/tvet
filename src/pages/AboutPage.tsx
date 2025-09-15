@@ -145,7 +145,7 @@ const AboutPage = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white py-20">
+      <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white py-20 mt-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">
@@ -167,7 +167,7 @@ const AboutPage = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105"
+                className="bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-400 transition-all duration-300 transform hover:scale-105 shadow-lg"
                 onClick={() => navigate("/jobs")}
               >
                 Explore Opportunities
@@ -408,7 +408,7 @@ const AboutPage = () => {
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105"
+              className="bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-400 transition-all duration-300 transform hover:scale-105 shadow-lg"
               onClick={() => navigate("/jobs")}
             >
               Explore Jobs
