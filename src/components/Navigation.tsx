@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Menu,
   X,
   Target,
-  Users,
-  BarChart3,
-  CreditCard,
+  Home,
+  Briefcase,
+  Building2,
+  Info,
   LogOut,
   User,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import { useAuth } from "../contexts/AuthContext";
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout, isAuthenticated } = useAuth();
 
   const handleLogout = () => {
@@ -24,11 +26,13 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { name: "Features", href: "#features", icon: Target },
-    { name: "For Students", href: "#students", icon: Users },
-    { name: "For Employers", href: "#employers", icon: BarChart3 },
-    { name: "Pricing", href: "#pricing", icon: CreditCard },
+    { name: "Home", href: "/", icon: Home },
+    { name: "Jobs", href: "/jobs", icon: Briefcase },
+    { name: "Companies", href: "/companies", icon: Building2 },
+    { name: "About", href: "/about", icon: Info },
   ];
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -47,29 +51,41 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item.name}
-                href={item.href}
-                className="text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center space-x-2"
+                onClick={() => navigate(item.href)}
+                className={`transition-colors duration-200 flex items-center space-x-2 px-3 py-2 rounded-md ${
+                  isActive(item.href)
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                }`}
               >
                 <item.icon className="w-4 h-4" />
                 <span>{item.name}</span>
-              </a>
+              </button>
             ))}
+            {isAuthenticated && (
+              <button
+                onClick={() => navigate("/dashboard")}
+                className={`transition-colors duration-200 flex items-center space-x-2 px-3 py-2 rounded-md ${
+                  isActive("/dashboard")
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                }`}
+              >
+                <User className="w-4 h-4" />
+                <span>Dashboard</span>
+              </button>
+            )}
           </div>
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <Button
-                  variant="ghost"
-                  className="text-muted-foreground hover:text-primary"
-                  onClick={() => navigate("/dashboard")}
-                >
-                  <User className="w-4 h-4 mr-2" />
-                  {user?.name}
-                </Button>
+                <span className="text-sm text-muted-foreground">
+                  Welcome, {user?.name}
+                </span>
                 <Button variant="outline" onClick={handleLogout}>
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
@@ -88,7 +104,7 @@ const Navigation = () => {
                   className="bg-gradient-primary hover:shadow-soft transition-all duration-200"
                   onClick={() => navigate("/signup")}
                 >
-                  Get Started
+                  Sign Up
                 </Button>
               </>
             )}
@@ -112,30 +128,44 @@ const Navigation = () => {
           <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-sm">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
-                <a
+                <button
                   key={item.name}
-                  href={item.href}
-                  className="flex items-center space-x-3 px-3 py-2 text-muted-foreground hover:text-primary hover:bg-secondary/50 rounded-md transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    navigate(item.href);
+                    setIsMenuOpen(false);
+                  }}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-colors duration-200 w-full text-left ${
+                    isActive(item.href)
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-primary hover:bg-secondary/50"
+                  }`}
                 >
                   <item.icon className="w-4 h-4" />
                   <span>{item.name}</span>
-                </a>
+                </button>
               ))}
+              {isAuthenticated && (
+                <button
+                  onClick={() => {
+                    navigate("/dashboard");
+                    setIsMenuOpen(false);
+                  }}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-colors duration-200 w-full text-left ${
+                    isActive("/dashboard")
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-primary hover:bg-secondary/50"
+                  }`}
+                >
+                  <User className="w-4 h-4" />
+                  <span>Dashboard</span>
+                </button>
+              )}
               <div className="flex flex-col space-y-2 mt-4 px-3">
                 {isAuthenticated ? (
                   <>
-                    <Button
-                      variant="ghost"
-                      className="text-muted-foreground hover:text-primary justify-start"
-                      onClick={() => {
-                        navigate("/dashboard");
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      {user?.name}
-                    </Button>
+                    <span className="text-sm text-muted-foreground px-3">
+                      Welcome, {user?.name}
+                    </span>
                     <Button
                       variant="outline"
                       onClick={() => {
@@ -166,7 +196,7 @@ const Navigation = () => {
                         setIsMenuOpen(false);
                       }}
                     >
-                      Get Started
+                      Sign Up
                     </Button>
                   </>
                 )}

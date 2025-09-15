@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import TVETDashboard from "../components/TVETDashboard";
+import WorkingADOFDashboard from "../components/WorkingADOFDashboard";
 import {
   User,
   Mail,
@@ -42,6 +43,11 @@ export default function DashboardView() {
   // Show TVET Dashboard for TVET students
   if (user.role === 'TVET_STUDENT') {
     return <TVETDashboard />;
+  }
+
+  // Show Working ADOF Dashboard for Working ADOF users
+  if (user.role === 'WORKING_ADOF') {
+    return <WorkingADOFDashboard />;
   }
 
   const stats = [
