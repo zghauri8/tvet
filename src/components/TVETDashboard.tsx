@@ -38,29 +38,41 @@ export default function TVETDashboard() {
     {
       id: 1,
       title: "Technical Skills Development",
-      description: "Learn essential technical skills for your chosen field",
+      description: "Learn essential technical skills for your chosen field including programming, system design, and modern development practices",
       progress: 75,
       status: "in-progress",
       duration: "8 weeks",
-      instructor: "Dr. Sarah Johnson"
+      instructor: "Dr. Sarah Johnson",
+      modules: 12,
+      completedModules: 9,
+      nextDeadline: "2024-02-15",
+      grade: "A-"
     },
     {
       id: 2,
       title: "Professional Communication",
-      description: "Master workplace communication and presentation skills",
+      description: "Master workplace communication, presentation skills, and professional writing for technical environments",
       progress: 45,
       status: "in-progress",
       duration: "6 weeks",
-      instructor: "Prof. Michael Chen"
+      instructor: "Prof. Michael Chen",
+      modules: 8,
+      completedModules: 4,
+      nextDeadline: "2024-02-10",
+      grade: "B+"
     },
     {
       id: 3,
       title: "Industry Certification Prep",
-      description: "Prepare for industry-recognized certifications",
+      description: "Prepare for industry-recognized certifications in your field with comprehensive exam preparation",
       progress: 0,
       status: "not-started",
       duration: "10 weeks",
-      instructor: "Eng. Lisa Rodriguez"
+      instructor: "Eng. Lisa Rodriguez",
+      modules: 15,
+      completedModules: 0,
+      nextDeadline: "2024-03-01",
+      grade: null
     }
   ];
 
@@ -68,9 +80,38 @@ export default function TVETDashboard() {
     completed: true,
     score: 85,
     lastTaken: "2024-01-15",
-    strengths: ["Analytical Thinking", "Problem Solving", "Attention to Detail"],
-    recommendations: ["Engineering", "Data Analysis", "Quality Control"]
+    strengths: ["Analytical Thinking", "Problem Solving", "Attention to Detail", "Technical Aptitude"],
+    recommendations: ["Software Engineering", "Data Analysis", "Quality Control", "System Administration"],
+    personalityType: "INTJ - The Architect",
+    careerFit: 92
   };
+
+  const achievements = [
+    {
+      id: 1,
+      title: "First Course Completed",
+      description: "Successfully completed Technical Skills Development course",
+      date: "2024-01-20",
+      icon: Award,
+      type: "course"
+    },
+    {
+      id: 2,
+      title: "Personality Assessment",
+      description: "Completed comprehensive personality assessment",
+      date: "2024-01-15",
+      icon: Brain,
+      type: "assessment"
+    },
+    {
+      id: 3,
+      title: "High Performer",
+      description: "Maintained A- average across all courses",
+      date: "2024-01-10",
+      icon: Star,
+      type: "performance"
+    }
+  ];
 
   if (!user) {
     return (
@@ -250,9 +291,16 @@ export default function TVETDashboard() {
                         style={{width: `${course.progress}%`}}
                       ></div>
                     </div>
+                    <div className="flex justify-between text-xs text-gray-400 mt-1">
+                      <span>{course.completedModules}/{course.modules} modules</span>
+                      {course.grade && <span>Grade: {course.grade}</span>}
+                    </div>
                   </div>
                   
-                  <p className="text-gray-400 text-sm mb-4">Instructor: {course.instructor}</p>
+                  <div className="mb-4">
+                    <p className="text-gray-400 text-sm mb-1">Instructor: {course.instructor}</p>
+                    <p className="text-gray-400 text-sm">Next deadline: {course.nextDeadline}</p>
+                  </div>
                   
                   <Button 
                     className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
@@ -294,6 +342,21 @@ export default function TVETDashboard() {
                 </Button>
               </div>
               
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-white mb-2">{personalityTestStatus.score}%</div>
+                  <div className="text-gray-300 text-sm">Assessment Score</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-white mb-2">{personalityTestStatus.careerFit}%</div>
+                  <div className="text-gray-300 text-sm">Career Fit</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-white mb-2">{personalityTestStatus.personalityType}</div>
+                  <div className="text-gray-300 text-sm">Personality Type</div>
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="text-lg font-semibold text-white mb-3">Top Strengths</h5>
@@ -320,6 +383,34 @@ export default function TVETDashboard() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Achievements Section */}
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold text-white mb-4">Recent Achievements</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {achievements.map((achievement) => {
+              const Icon = achievement.icon;
+              return (
+                <div key={achievement.id} className="relative p-4 bg-slate-800/50 backdrop-blur-sm rounded-lg">
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px]">
+                    <div className="w-full h-full bg-slate-800/50 rounded-lg"></div>
+                  </div>
+                  
+                  <div className="relative flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-sm font-bold text-white">{achievement.title}</h4>
+                      <p className="text-xs text-gray-300">{achievement.description}</p>
+                      <p className="text-xs text-gray-400">{achievement.date}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
