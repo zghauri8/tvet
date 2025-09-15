@@ -1,163 +1,224 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Brain, TrendingUp, Target, Users, Lightbulb, Shield } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
+import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
 
 interface Question {
-  id: number;
-  text: string;
-  options: string[];
+  question_no: number;
+  question: string;
+  options: Array<{
+    score: number;
+    text: string;
+  }>;
+  trait: string;
 }
 
-const questions: Question[] = [
-  {
-    id: 1,
-    text: "When working in a team, you prefer to:",
-    options: ["Lead the project", "Support others", "Work independently", "Brainstorm ideas"]
-  },
-  {
-    id: 2,
-    text: "Your ideal work environment is:",
-    options: ["Fast-paced and dynamic", "Structured and organized", "Creative and flexible", "Collaborative and social"]
-  },
-  {
-    id: 3,
-    text: "When solving problems, you typically:",
-    options: ["Analyze data thoroughly", "Trust your intuition", "Seek input from others", "Try multiple approaches"]
-  },
-  {
-    id: 4,
-    text: "You feel most energized when:",
-    options: ["Achieving targets", "Helping others succeed", "Learning new skills", "Creating something new"]
-  },
-  {
-    id: 5,
-    text: "Your communication style is:",
-    options: ["Direct and clear", "Empathetic and supportive", "Analytical and detailed", "Inspiring and motivational"]
-  }
-];
+interface TestData {
+  test_name: string;
+  trait: string;
+  user_id: string;
+  questions: Question[];
+}
 
-const PersonalityTest = () => {
+interface PersonalityTestProps {
+  onTestComplete: (results: any) => void;
+  onBack: () => void;
+}
+
+export default function PersonalityTest({ onTestComplete, onBack }: PersonalityTestProps) {
+  const [step, setStep] = useState<'setup' | 'test' | 'loading'>('setup');
+  const [userId, setUserId] = useState('');
+  const [selectedTrait, setSelectedTrait] = useState('');
+  const [testData, setTestData] = useState<TestData | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<number[]>([]);
-  const [showResults, setShowResults] = useState(false);
+  const [answers, setAnswers] = useState<{[key: number]: number}>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleAnswer = (answerIndex: number) => {
-    const newAnswers = [...answers, answerIndex];
-    setAnswers(newAnswers);
+  const traits = [
+    { value: 'leadership', label: 'Leadership' },
+    { value: 'communication', label: 'Communication' },
+    { value: 'problem_solving', label: 'Problem Solving' },
+    { value: 'teamwork', label: 'Teamwork' },
+    { value: 'creativity', label: 'Creativity' },
+    { value: 'analytical', label: 'Analytical Thinking' },
+    { value: 'emotional_intelligence', label: 'Emotional Intelligence' },
+    { value: 'adaptability', label: 'Adaptability' }
+  ];
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      setShowResults(true);
+  const generateTest = async () => {
+    if (!userId || !selectedTrait) return;
+    
+    setStep('loading');
+    try {
+      const response = await fetch('https://projekanda.top/generate_test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          trait: selectedTrait
+        })
+      });
+
+      if (response.ok) {
+        // After generating test, fetch the questions
+        await fetchQuestions();
+      } else {
+        console.error('Failed to generate test');
+        setStep('setup');
+      }
+    } catch (error) {
+      console.error('Error generating test:', error);
+      setStep('setup');
     }
   };
 
-  const resetTest = () => {
-    setCurrentQuestion(0);
-    setAnswers([]);
-    setShowResults(false);
+  const fetchQuestions = async () => {
+    try {
+      const response = await fetch(`https://projekanda.top/get_mcqs/${userId}`);
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        setTestData(data[0]); // Take the first test data
+        setStep('test');
+      } else {
+        console.error('No test data found');
+        setStep('setup');
+      }
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      setStep('setup');
+    }
   };
 
-  // Mock personality analysis based on answers
-  const getPersonalityProfile = () => {
-    const profiles = {
-      leader: { name: "Natural Leader", icon: Target, color: "text-accent" },
-      supporter: { name: "Team Supporter", icon: Users, color: "text-success" },
-      analyst: { name: "Data Analyst", icon: Brain, color: "text-primary" },
-      innovator: { name: "Creative Innovator", icon: Lightbulb, color: "text-warning" }
-    };
-
-    const strengths = [
-      "Strategic thinking", "Team collaboration", "Problem solving", 
-      "Communication", "Adaptability", "Leadership"
-    ];
-
-    const weaknesses = [
-      "Time management", "Public speaking", "Risk taking", 
-      "Delegation", "Stress management", "Technical skills"
-    ];
-
-    // Simple logic based on most common answer patterns
-    const dominantAnswer = answers.reduce((a, b, i, arr) => 
-      arr.filter(v => v === a).length >= arr.filter(v => v === b).length ? a : b
-    );
-
-    const profileKeys = Object.keys(profiles) as (keyof typeof profiles)[];
-    const selectedProfile = profiles[profileKeys[dominantAnswer]];
-
-    return {
-      profile: selectedProfile,
-      strengths: strengths.slice(0, 4),
-      weaknesses: weaknesses.slice(0, 3)
-    };
+  const handleAnswerSelect = (questionNo: number, score: number) => {
+    setAnswers(prev => ({
+      ...prev,
+      [questionNo]: score
+    }));
   };
 
-  if (showResults) {
-    const { profile, strengths, weaknesses } = getPersonalityProfile();
-    const ProfileIcon = profile.icon;
+  const handleNext = () => {
+    if (currentQuestion < (testData?.questions.length || 0) - 1) {
+      setCurrentQuestion(prev => prev + 1);
+    }
+  };
 
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(prev => prev - 1);
+    }
+  };
+
+  const submitAnswers = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('https://projekanda.top/submit_answers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          trait: selectedTrait,
+          answers: answers,
+          test_name: testData?.test_name
+        })
+      });
+
+      if (response.ok) {
+        const results = await response.json();
+        onTestComplete(results);
+      } else {
+        console.error('Failed to submit answers');
+      }
+    } catch (error) {
+      console.error('Error submitting answers:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isTestComplete = () => {
+    return testData?.questions.every(q => answers[q.question_no] !== undefined);
+  };
+
+  const progress = testData ? ((currentQuestion + 1) / testData.questions.length) * 100 : 0;
+
+  if (step === 'loading') {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <Card className="p-8 shadow-card">
-          <div className="text-center mb-8">
-            <div className={`w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-primary flex items-center justify-center`}>
-              <ProfileIcon className="w-10 h-10 text-white" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="p-8 max-w-md w-full mx-4">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
             </div>
-            <h2 className="text-3xl font-bold mb-2">Your Personality Profile</h2>
-            <Badge variant="outline" className="text-lg px-4 py-2">
-              {profile.name}
-            </Badge>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Generating Your Test</h2>
+            <p className="text-gray-600">Please wait while we prepare your personality assessment...</p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (step === 'setup') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="p-8 max-w-md w-full mx-4">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Personality Assessment</h1>
+            <p className="text-gray-600">Discover your strengths and traits through our comprehensive assessment</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Strengths */}
+          <div className="space-y-6">
             <div>
-              <div className="flex items-center mb-4">
-                <TrendingUp className="w-5 h-5 text-success mr-2" />
-                <h3 className="text-xl font-semibold">Your Strengths</h3>
-              </div>
-              <div className="space-y-2">
-                {strengths.map((strength, index) => (
-                  <div key={index} className="flex items-center p-3 bg-success/10 rounded-lg">
-                    <Shield className="w-4 h-4 text-success mr-3" />
-                    <span>{strength}</span>
-                  </div>
-                ))}
-              </div>
+              <Label htmlFor="userId" className="text-sm font-medium text-gray-700">
+                User ID
+              </Label>
+              <Input
+                id="userId"
+                type="text"
+                placeholder="Enter your user ID"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                className="mt-1"
+              />
             </div>
 
-            {/* Areas for Development */}
             <div>
-              <div className="flex items-center mb-4">
-                <Target className="w-5 h-5 text-warning mr-2" />
-                <h3 className="text-xl font-semibold">Areas for Development</h3>
-              </div>
-              <div className="space-y-2">
-                {weaknesses.map((weakness, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-warning/10 rounded-lg">
-                    <span>{weakness}</span>
-                    <Button size="sm" variant="outline" className="text-xs">
-                      Get Coaching
-                    </Button>
-                  </div>
-                ))}
-              </div>
+              <Label htmlFor="trait" className="text-sm font-medium text-gray-700">
+                Assessment Focus
+              </Label>
+              <Select value={selectedTrait} onValueChange={setSelectedTrait}>
+                <SelectTrigger className="mt-1">
+                  <SelectValue placeholder="Choose a trait to assess" />
+                </SelectTrigger>
+                <SelectContent>
+                  {traits.map((trait) => (
+                    <SelectItem key={trait.value} value={trait.value}>
+                      {trait.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          </div>
 
-          <div className="mt-8 text-center space-y-4">
-            <p className="text-muted-foreground">
-              Based on your results, our AI has identified personalized coaching opportunities to help you excel.
-            </p>
-            <div className="flex justify-center space-x-4">
-              <Button onClick={resetTest} variant="outline">
-                Retake Test
+            <div className="flex space-x-3">
+              <Button variant="outline" onClick={onBack} className="flex-1">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
               </Button>
-              <Button className="bg-gradient-primary">
-                View Career Recommendations
+              <Button 
+                onClick={generateTest} 
+                disabled={!userId || !selectedTrait}
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
+              >
+                Start Assessment
               </Button>
             </div>
           </div>
@@ -166,46 +227,96 @@ const PersonalityTest = () => {
     );
   }
 
-  return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Personality Assessment</h2>
-          <Badge variant="outline">
-            {currentQuestion + 1} of {questions.length}
-          </Badge>
-        </div>
-        <Progress value={(currentQuestion / questions.length) * 100} className="mb-2" />
-        <p className="text-sm text-muted-foreground">
-          Progress: {Math.round((currentQuestion / questions.length) * 100)}% complete
-        </p>
-      </div>
+  if (step === 'test' && testData) {
+    const question = testData.questions[currentQuestion];
+    const isLastQuestion = currentQuestion === testData.questions.length - 1;
 
-      <Card className="p-8 shadow-card">
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4">
-            {questions[currentQuestion].text}
-          </h3>
-        </div>
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="p-8 max-w-2xl w-full">
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">Assessment in Progress</h1>
+            <div className="flex items-center space-x-4">
+              <Progress value={progress} className="flex-1" />
+              <span className="text-sm font-medium text-gray-600">
+                {currentQuestion + 1} of {testData.questions.length}
+              </span>
+            </div>
+          </div>
 
-        <div className="grid gap-4">
-          {questions[currentQuestion].options.map((option, index) => (
+          <div className="bg-white rounded-lg border p-6 mb-6">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              Question {question.question_no}
+            </h2>
+            <p className="text-gray-700 mb-6">{question.question}</p>
+
+            <div className="space-y-3">
+              {question.options.map((option, index) => (
+                <label
+                  key={index}
+                  className={`flex items-center p-3 rounded-lg border cursor-pointer transition-colors ${
+                    answers[question.question_no] === option.score
+                      ? 'bg-blue-50 border-blue-200'
+                      : 'hover:bg-gray-50'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name={`question-${question.question_no}`}
+                    value={option.score}
+                    checked={answers[question.question_no] === option.score}
+                    onChange={() => handleAnswerSelect(question.question_no, option.score)}
+                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                  />
+                  <span className="ml-3 text-gray-700">{option.text}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-between">
             <Button
-              key={index}
               variant="outline"
-              className="p-6 h-auto text-left justify-start hover:bg-primary/10 hover:border-primary transition-all duration-200"
-              onClick={() => handleAnswer(index)}
+              onClick={handlePrevious}
+              disabled={currentQuestion === 0}
             >
-              <div className="w-6 h-6 rounded-full border-2 border-primary/30 mr-4 flex items-center justify-center">
-                <span className="text-sm font-medium">{String.fromCharCode(65 + index)}</span>
-              </div>
-              {option}
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Previous
             </Button>
-          ))}
-        </div>
-      </Card>
-    </div>
-  );
-};
 
-export default PersonalityTest;
+            {isLastQuestion ? (
+              <Button
+                onClick={submitAnswers}
+                disabled={!isTestComplete() || isSubmitting}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Complete Assessment
+                  </>
+                )}
+              </Button>
+            ) : (
+              <Button
+                onClick={handleNext}
+                disabled={answers[question.question_no] === undefined}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                Next Question
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            )}
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  return null;
+}

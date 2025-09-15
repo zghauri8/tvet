@@ -1,9 +1,12 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import PersonalityTest from "./PersonalityTest";
+import PersonalityTestResults from "./PersonalityTestResults";
 import { 
   User, 
   Mail, 
@@ -37,9 +40,28 @@ import {
 export default function TVETDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [currentView, setCurrentView] = useState<'dashboard' | 'test' | 'results'>('dashboard');
+  const [testResults, setTestResults] = useState<any>(null);
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleStartTest = () => {
+    setCurrentView('test');
+  };
+
+  const handleTestComplete = (results: any) => {
+    setTestResults(results);
+    setCurrentView('results');
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+  };
+
+  const handleRetakeTest = () => {
+    setCurrentView('test');
   };
 
   // Mock data for courses and personality test status
@@ -130,6 +152,27 @@ export default function TVETDashboard() {
           <p className="text-gray-600">Please wait while we load your dashboard.</p>
         </div>
       </div>
+    );
+  }
+
+  // Show personality test component
+  if (currentView === 'test') {
+    return (
+      <PersonalityTest 
+        onTestComplete={handleTestComplete}
+        onBack={handleBackToDashboard}
+      />
+    );
+  }
+
+  // Show test results component
+  if (currentView === 'results') {
+    return (
+      <PersonalityTestResults 
+        userId={user.id || user.email}
+        onBack={handleBackToDashboard}
+        onRetakeTest={handleRetakeTest}
+      />
     );
   }
 
@@ -321,15 +364,15 @@ export default function TVETDashboard() {
                   <p className="text-gray-600">
                     {personalityTestStatus.completed 
                       ? `Completed - Score: ${personalityTestStatus.score}%` 
-                      : "Not completed yet"}
+                      : "Take our comprehensive personality assessment to discover your strengths"}
                   </p>
                 </div>
               </div>
               <Button 
                 className="bg-purple-600 hover:bg-purple-700 text-white"
-                onClick={() => navigate("/personality-test")}
+                onClick={handleStartTest}
               >
-                {personalityTestStatus.completed ? "Retake Test" : "Start Test"}
+                {personalityTestStatus.completed ? "Retake Test" : "Start Assessment"}
               </Button>
             </div>
           </Card>
