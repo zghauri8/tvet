@@ -142,11 +142,11 @@ export default function PersonalityTestResults({ userId, onBack, onRetakeTest }:
             <h1 className="text-2xl font-semibold text-gray-800">Personality Assessment Results</h1>
           </div>
           <div className="flex items-center space-x-3">
-            <Button variant="outline" onClick={onBack}>
+            <Button onClick={onBack} className="bg-blue-600 hover:bg-blue-700">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              View Dashboard
             </Button>
-            <Button onClick={onRetakeTest} className="bg-blue-600 hover:bg-blue-700">
+            <Button variant="outline" onClick={onRetakeTest}>
               <RefreshCw className="w-4 h-4 mr-2" />
               Take New Test
             </Button>

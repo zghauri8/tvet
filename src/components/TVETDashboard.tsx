@@ -40,7 +40,7 @@ import {
 export default function TVETDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [currentView, setCurrentView] = useState<'dashboard' | 'test' | 'results'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'test' | 'results'>('test');
   const [testResults, setTestResults] = useState<any>(null);
 
   const handleLogout = () => {
@@ -54,6 +54,10 @@ export default function TVETDashboard() {
   const handleTestComplete = (results: any) => {
     setTestResults(results);
     setCurrentView('results');
+  };
+
+  const handleViewDashboard = () => {
+    setCurrentView('dashboard');
   };
 
   const handleBackToDashboard = () => {
@@ -170,7 +174,7 @@ export default function TVETDashboard() {
     return (
       <PersonalityTestResults 
         userId={user.id || user.email}
-        onBack={handleBackToDashboard}
+        onBack={handleViewDashboard}
         onRetakeTest={handleRetakeTest}
       />
     );
