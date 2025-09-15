@@ -163,40 +163,22 @@ export default function TVETDashboard() {
           <div className="p-4">
             <nav className="space-y-2">
               <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                Navigation
+                TVET Student Menu
               </div>
               
               <Button className="w-full justify-start bg-blue-50 text-blue-700 border-blue-200">
-                <BarChart3 className="w-4 h-4 mr-3" />
-                Dashboard
-              </Button>
-              
-              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
                 <Brain className="w-4 h-4 mr-3" />
                 Personality Test
               </Button>
-
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-6">
-                Learning
-              </div>
               
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
                 <BookOpen className="w-4 h-4 mr-3" />
-                My Courses
+                Courses
               </Button>
               
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
                 <FileText className="w-4 h-4 mr-3" />
-                Reports
-              </Button>
-
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-6">
-                Tools
-              </div>
-              
-              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
-                <Settings className="w-4 h-4 mr-3" />
-                Settings
+                Report
               </Button>
             </nav>
           </div>
@@ -207,40 +189,16 @@ export default function TVETDashboard() {
           {/* Welcome Section */}
           <div className="mb-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">Welcome back, {user.name}!</h2>
-            <p className="text-gray-600">Here's your learning progress and upcoming activities</p>
+            <p className="text-gray-600">TVET Student Dashboard - Complete your personality test, courses, and view your report</p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Courses Completed</p>
-                  <p className="text-2xl font-bold text-gray-900">2</p>
-                </div>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <BookOpen className="w-6 h-6 text-blue-600" />
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Overall Progress</p>
-                  <p className="text-2xl font-bold text-gray-900">68%</p>
-                </div>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Assessment Score</p>
-                  <p className="text-2xl font-bold text-gray-900">85%</p>
+                  <p className="text-sm font-medium text-gray-600">Personality Test</p>
+                  <p className="text-2xl font-bold text-gray-900">{personalityTestStatus.completed ? "Completed" : "Pending"}</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <Brain className="w-6 h-6 text-purple-600" />
@@ -251,11 +209,23 @@ export default function TVETDashboard() {
             <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Certificates</p>
-                  <p className="text-2xl font-bold text-gray-900">1</p>
+                  <p className="text-sm font-medium text-gray-600">3 Courses</p>
+                  <p className="text-2xl font-bold text-gray-900">{courses.filter(c => c.status === "completed").length}/3</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <Award className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <BookOpen className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </Card>
+            
+            <Card className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Report Status</p>
+                  <p className="text-2xl font-bold text-gray-900">{personalityTestStatus.completed ? "Ready" : "Pending"}</p>
+                </div>
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-green-600" />
                 </div>
               </div>
             </Card>
@@ -338,29 +308,6 @@ export default function TVETDashboard() {
             </Card>
           </div>
 
-          {/* User Profile Card */}
-          <Card className="p-6 mb-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800">{user.name}</h3>
-                  <p className="text-gray-600">{user.email}</p>
-                  <Badge className="mt-1 bg-green-100 text-green-800">Active Student</Badge>
-                </div>
-              </div>
-              <div className="flex space-x-3">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Upgrade Plan
-                </Button>
-                <Button variant="outline">
-                  View Profile
-                </Button>
-              </div>
-            </div>
-          </Card>
 
           {/* Personality Test Section */}
           <Card className="p-6 mb-8">
@@ -387,11 +334,11 @@ export default function TVETDashboard() {
             </div>
           </Card>
 
-          {/* Courses Section */}
+          {/* 3 Courses Section */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">My Courses</h3>
-              <Badge className="bg-blue-100 text-blue-800">3 Courses</Badge>
+              <h3 className="text-xl font-semibold text-gray-800">Courses</h3>
+              <Badge className="bg-blue-100 text-blue-800">Required Courses</Badge>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {courses.map((course) => (
@@ -452,7 +399,7 @@ export default function TVETDashboard() {
             </div>
           </div>
 
-          {/* Reports Section */}
+          {/* Report Section */}
           <Card className="p-6 mb-8">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-4">
@@ -460,15 +407,15 @@ export default function TVETDashboard() {
                   <FileText className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-800">Career Assessment Report</h4>
-                  <p className="text-gray-600">Based on your personality test and course progress</p>
+                  <h4 className="text-lg font-semibold text-gray-800">Report</h4>
+                  <p className="text-gray-600">Based on your personality test and 3 courses completion</p>
                 </div>
               </div>
               <Button 
                 className="bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={() => navigate("/reports")}
               >
-                View Full Report
+                View Report
               </Button>
             </div>
             
@@ -513,47 +460,6 @@ export default function TVETDashboard() {
             </div>
           </Card>
 
-          {/* Refer a Friend Section */}
-          <Card className="p-6 mb-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
-                  <Gift className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800">Refer a Friend</h4>
-                  <p className="text-gray-600">Earn $10 for each successful referral</p>
-                </div>
-              </div>
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
-                Refer Now
-              </Button>
-            </div>
-          </Card>
-
-          {/* Achievements Section */}
-          <div className="mb-8">
-            <h3 className="text-xl font-semibold text-gray-800 mb-6">Recent Achievements</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {achievements.map((achievement) => {
-                const Icon = achievement.icon;
-                return (
-                  <Card key={achievement.id} className="p-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-yellow-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-sm font-semibold text-gray-800">{achievement.title}</h4>
-                        <p className="text-xs text-gray-600">{achievement.description}</p>
-                        <p className="text-xs text-gray-500">{achievement.date}</p>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </div>
     </div>

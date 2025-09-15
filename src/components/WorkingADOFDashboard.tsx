@@ -160,26 +160,17 @@ export default function WorkingADOFDashboard() {
           <div className="p-4">
             <nav className="space-y-2">
               <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                Job Search
+                Working ADOF Menu
               </div>
               
               <Button className="w-full justify-start bg-blue-50 text-blue-700 border-blue-200">
-                <BarChart3 className="w-4 h-4 mr-3" />
-                Dashboard
+                <Briefcase className="w-4 h-4 mr-3" />
+                Enter Job for Apply
               </Button>
-              
-              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
-                <Search className="w-4 h-4 mr-3" />
-                Browse Jobs
-              </Button>
-
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-6">
-                Application Process
-              </div>
               
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
                 <Upload className="w-4 h-4 mr-3" />
-                Upload CV
+                Collect CV
               </Button>
               
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
@@ -189,16 +180,22 @@ export default function WorkingADOFDashboard() {
               
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
                 <FileText className="w-4 h-4 mr-3" />
-                Applications
+                Provide Personality Report
               </Button>
-
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 mt-6">
-                Tools
-              </div>
               
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
-                <Settings className="w-4 h-4 mr-3" />
-                Settings
+                <Activity className="w-4 h-4 mr-3" />
+                Add Results in Backend
+              </Button>
+              
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                <Users className="w-4 h-4 mr-3" />
+                Filter Out Employees
+              </Button>
+              
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:bg-gray-50">
+                <CheckCircle className="w-4 h-4 mr-3" />
+                Recommend or Reject
               </Button>
             </nav>
           </div>
@@ -209,7 +206,7 @@ export default function WorkingADOFDashboard() {
           {/* Welcome Section */}
           <div className="mb-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">Welcome back, {user.name}!</h2>
-            <p className="text-gray-600">Track your job search progress and discover new opportunities</p>
+            <p className="text-gray-600">Working ADOF Dashboard - Manage job applications, CV collection, personality tests, and employee recommendations</p>
           </div>
 
           {/* Stats Cards */}
@@ -217,8 +214,8 @@ export default function WorkingADOFDashboard() {
             <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Applications Sent</p>
-                  <p className="text-2xl font-bold text-gray-900">{applicationProcess.applicationsCount}</p>
+                  <p className="text-sm font-medium text-gray-600">Jobs Posted</p>
+                  <p className="text-2xl font-bold text-gray-900">3</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Briefcase className="w-6 h-6 text-blue-600" />
@@ -229,11 +226,11 @@ export default function WorkingADOFDashboard() {
             <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Interviews</p>
-                  <p className="text-2xl font-bold text-gray-900">{applicationProcess.interviewsScheduled}</p>
+                  <p className="text-sm font-medium text-gray-600">CVs Collected</p>
+                  <p className="text-2xl font-bold text-gray-900">15</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-green-600" />
+                  <Upload className="w-6 h-6 text-green-600" />
                 </div>
               </div>
             </Card>
@@ -241,8 +238,8 @@ export default function WorkingADOFDashboard() {
             <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Test Score</p>
-                  <p className="text-2xl font-bold text-gray-900">{applicationProcess.testScore}%</p>
+                  <p className="text-sm font-medium text-gray-600">Tests Completed</p>
+                  <p className="text-2xl font-bold text-gray-900">12</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <Brain className="w-6 h-6 text-purple-600" />
@@ -253,11 +250,11 @@ export default function WorkingADOFDashboard() {
             <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Job Offers</p>
-                  <p className="text-2xl font-bold text-gray-900">{applicationProcess.offersReceived}</p>
+                  <p className="text-sm font-medium text-gray-600">Recommendations</p>
+                  <p className="text-2xl font-bold text-gray-900">8</p>
                 </div>
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <Award className="w-6 h-6 text-yellow-600" />
+                  <CheckCircle className="w-6 h-6 text-yellow-600" />
                 </div>
               </div>
             </Card>
@@ -265,76 +262,76 @@ export default function WorkingADOFDashboard() {
 
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* Application Progress Chart */}
+            {/* Employee Processing Chart */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Application Progress</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Employee Processing</h3>
                 <BarChart3 className="w-5 h-5 text-gray-400" />
               </div>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Applications Sent</span>
-                  <span className="text-sm font-medium text-gray-800">{applicationProcess.applicationsCount}/50</span>
+                  <span className="text-sm text-gray-600">CVs Collected</span>
+                  <span className="text-sm font-medium text-gray-800">15/20</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-500 h-2 rounded-full" style={{width: `${(applicationProcess.applicationsCount/50)*100}%`}}></div>
+                  <div className="bg-blue-500 h-2 rounded-full" style={{width: '75%'}}></div>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Interviews Scheduled</span>
-                  <span className="text-sm font-medium text-gray-800">{applicationProcess.interviewsScheduled}/10</span>
+                  <span className="text-sm text-gray-600">Tests Completed</span>
+                  <span className="text-sm font-medium text-gray-800">12/15</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-green-500 h-2 rounded-full" style={{width: `${(applicationProcess.interviewsScheduled/10)*100}%`}}></div>
+                  <div className="bg-green-500 h-2 rounded-full" style={{width: '80%'}}></div>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Job Offers</span>
-                  <span className="text-sm font-medium text-gray-800">{applicationProcess.offersReceived}/5</span>
+                  <span className="text-sm text-gray-600">Recommendations</span>
+                  <span className="text-sm font-medium text-gray-800">8/12</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-purple-500 h-2 rounded-full" style={{width: `${(applicationProcess.offersReceived/5)*100}%`}}></div>
+                  <div className="bg-purple-500 h-2 rounded-full" style={{width: '67%'}}></div>
                 </div>
               </div>
             </Card>
 
-            {/* Job Search Activity Chart */}
+            {/* Process Activity Chart */}
             <Card className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Job Search Activity</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Process Activity</h3>
                 <PieChart className="w-5 h-5 text-gray-400" />
               </div>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <Search className="w-4 h-4 text-blue-500 mr-2" />
-                    <span className="text-sm text-gray-600">Jobs Viewed</span>
+                    <Briefcase className="w-4 h-4 text-blue-500 mr-2" />
+                    <span className="text-sm text-gray-600">Jobs Posted</span>
                   </div>
-                  <span className="text-sm font-medium text-gray-800">45</span>
+                  <span className="text-sm font-medium text-gray-800">3</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <Briefcase className="w-4 h-4 text-green-500 mr-2" />
-                    <span className="text-sm text-gray-600">Applications</span>
+                    <Upload className="w-4 h-4 text-green-500 mr-2" />
+                    <span className="text-sm text-gray-600">CVs Collected</span>
                   </div>
-                  <span className="text-sm font-medium text-gray-800">{applicationProcess.applicationsCount}</span>
+                  <span className="text-sm font-medium text-gray-800">15</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <Calendar className="w-4 h-4 text-purple-500 mr-2" />
-                    <span className="text-sm text-gray-600">Interviews</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-800">{applicationProcess.interviewsScheduled}</span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Star className="w-4 h-4 text-yellow-500 mr-2" />
-                    <span className="text-sm text-gray-600">Saved Jobs</span>
+                    <Brain className="w-4 h-4 text-purple-500 mr-2" />
+                    <span className="text-sm text-gray-600">Tests Completed</span>
                   </div>
                   <span className="text-sm font-medium text-gray-800">12</span>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-yellow-500 mr-2" />
+                    <span className="text-sm text-gray-600">Recommendations</span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-800">8</span>
                 </div>
               </div>
             </Card>
@@ -369,17 +366,26 @@ export default function WorkingADOFDashboard() {
             </div>
           </Card>
 
-          {/* Application Process Status */}
+          {/* Working ADOF Process Status */}
           <Card className="p-6 mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-6">Application Process Status</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-6">Working ADOF Process Status</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-4 bg-gray-50 rounded-lg">
+                <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Briefcase className="w-8 h-8 text-blue-600" />
+                </div>
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">Enter Job for Apply</h4>
+                <p className="text-gray-600 text-sm mb-2">3 jobs posted for applications</p>
+                <Badge className="bg-green-100 text-green-800">Active</Badge>
+              </div>
+              
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <div className="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Upload className="w-8 h-8 text-green-600" />
                 </div>
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">CV Collection</h4>
-                <p className="text-gray-600 text-sm mb-2">CV uploaded and processed</p>
-                <Badge className="bg-green-100 text-green-800">Completed</Badge>
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">Collect CV</h4>
+                <p className="text-gray-600 text-sm mb-2">15 CVs collected from applicants</p>
+                <Badge className="bg-green-100 text-green-800">In Progress</Badge>
               </div>
               
               <div className="text-center p-4 bg-gray-50 rounded-lg">
@@ -387,135 +393,140 @@ export default function WorkingADOFDashboard() {
                   <Brain className="w-8 h-8 text-purple-600" />
                 </div>
                 <h4 className="text-lg font-semibold text-gray-800 mb-2">Personality Test</h4>
-                <p className="text-gray-600 text-sm mb-2">Score: {applicationProcess.testScore}%</p>
-                <Badge className="bg-green-100 text-green-800">Completed</Badge>
-              </div>
-              
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Briefcase className="w-8 h-8 text-blue-600" />
-                </div>
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">Job Applications</h4>
-                <p className="text-gray-600 text-sm mb-2">{applicationProcess.applicationsCount} applications sent</p>
-                <Badge className="bg-yellow-100 text-yellow-800">In Progress</Badge>
+                <p className="text-gray-600 text-sm mb-2">12 tests completed</p>
+                <Badge className="bg-yellow-100 text-yellow-800">Processing</Badge>
               </div>
             </div>
           </Card>
 
-          {/* My Applications */}
+          {/* Working ADOF Process Steps */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">My Job Applications</h3>
-              <Badge className="bg-blue-100 text-blue-800">{jobApplications.length} Applications</Badge>
+              <h3 className="text-xl font-semibold text-gray-800">Working ADOF Process Steps</h3>
+              <Badge className="bg-blue-100 text-blue-800">7 Steps</Badge>
             </div>
             <div className="space-y-4">
-              {jobApplications.map((application) => (
-                <Card key={application.id} className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-4 mb-2">
-                        <h4 className="text-xl font-semibold text-gray-800">{application.title}</h4>
-                        <Badge 
-                          className={
-                            application.status === "applied" 
-                              ? "bg-blue-100 text-blue-800" 
-                              : application.status === "under-review" 
-                              ? "bg-yellow-100 text-yellow-800" 
-                              : "bg-green-100 text-green-800"
-                          }
-                        >
-                          {application.status === "applied" ? "Applied" : 
-                           application.status === "under-review" ? "Under Review" : "Interview Scheduled"}
-                        </Badge>
-                      </div>
-                      <p className="text-gray-600 mb-2">{application.company} • {application.location}</p>
-                      <p className="text-gray-500 text-sm mb-2">{application.description}</p>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>💰 {application.salary}</span>
-                        <span>📅 Applied: {application.appliedDate}</span>
-                      </div>
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">1. Enter Job for Apply</h4>
+                      <Badge className="bg-green-100 text-green-800">Completed</Badge>
                     </div>
-                    <div className="flex flex-col space-y-2">
-                      <Button 
-                        className="bg-blue-600 hover:bg-blue-700 text-white"
-                        onClick={() => navigate(`/job/${application.id}`)}
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        View Details
-                      </Button>
-                      {application.status === "interview-scheduled" && (
-                        <Button 
-                          variant="outline"
-                          className="border-green-500 text-green-600 hover:bg-green-50"
-                        >
-                          <Calendar className="w-4 h-4 mr-2" />
-                          View Interview
-                        </Button>
-                      )}
-                    </div>
+                    <p className="text-gray-600 mb-2">Posted 3 job positions for applications</p>
+                    <p className="text-gray-500 text-sm mb-2">Software Engineer, Product Manager, Data Analyst positions are now live</p>
                   </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Recommended Jobs */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">Recommended Jobs for You</h3>
-              <Button variant="outline" onClick={() => navigate("/jobs")}>
-                View All Jobs
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {recentJobs.map((job) => (
-                <Card key={job.id} className="p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <Badge className="bg-blue-100 text-blue-800">{job.type}</Badge>
-                    <div className="flex items-center text-gray-500 text-sm">
-                      <Clock className="w-4 h-4 mr-1" />
-                      {job.postedDate}
-                    </div>
-                  </div>
-                  
-                  <h4 className="text-lg font-semibold text-gray-800 mb-2">{job.title}</h4>
-                  <p className="text-gray-600 text-sm mb-2">{job.company}</p>
-                  <p className="text-gray-500 text-sm mb-4">{job.location}</p>
-                  
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-green-600 font-semibold">{job.salary}</span>
-                  </div>
-                  
-                  <Button 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={() => navigate(`/job/${job.id}`)}
-                  >
-                    <Briefcase className="w-4 h-4 mr-2" />
-                    Apply Now
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add New Job
                   </Button>
-                </Card>
-              ))}
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">2. Collect CV</h4>
+                      <Badge className="bg-yellow-100 text-yellow-800">In Progress</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">15 CVs collected from applicants</p>
+                    <p className="text-gray-500 text-sm mb-2">CVs are being processed and reviewed for initial screening</p>
+                  </div>
+                  <Button className="bg-green-600 hover:bg-green-700 text-white">
+                    <Upload className="w-4 h-4 mr-2" />
+                    View CVs
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">3. Personality Test</h4>
+                      <Badge className="bg-yellow-100 text-yellow-800">Processing</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">12 personality tests completed</p>
+                    <p className="text-gray-500 text-sm mb-2">Test results are being analyzed and scored</p>
+                  </div>
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Brain className="w-4 h-4 mr-2" />
+                    View Results
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">4. Provide Personality Report</h4>
+                      <Badge className="bg-blue-100 text-blue-800">Pending</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">Generate comprehensive personality reports</p>
+                    <p className="text-gray-500 text-sm mb-2">Reports will be created based on test results</p>
+                  </div>
+                  <Button variant="outline">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Generate Reports
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">5. Add Results in Backend</h4>
+                      <Badge className="bg-blue-100 text-blue-800">Pending</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">Store all results and data in backend system</p>
+                    <p className="text-gray-500 text-sm mb-2">Results will be saved for further processing</p>
+                  </div>
+                  <Button variant="outline">
+                    <Activity className="w-4 h-4 mr-2" />
+                    Save to Backend
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">6. Filter Out Employees</h4>
+                      <Badge className="bg-blue-100 text-blue-800">Pending</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">Filter and categorize employees based on criteria</p>
+                    <p className="text-gray-500 text-sm mb-2">Apply filtering algorithms to match candidates</p>
+                  </div>
+                  <Button variant="outline">
+                    <Users className="w-4 h-4 mr-2" />
+                    Start Filtering
+                  </Button>
+                </div>
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <h4 className="text-xl font-semibold text-gray-800">7. Recommend or Reject</h4>
+                      <Badge className="bg-blue-100 text-blue-800">Pending</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">Final recommendations for each candidate</p>
+                    <p className="text-gray-500 text-sm mb-2">Make final hiring decisions based on all data</p>
+                  </div>
+                  <Button variant="outline">
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Make Decisions
+                  </Button>
+                </div>
+              </Card>
             </div>
           </div>
 
-          {/* Refer a Friend Section */}
-          <Card className="p-6 mb-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
-                  <Gift className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-800">Refer a Friend</h4>
-                  <p className="text-gray-600">Earn $10 for each successful referral</p>
-                </div>
-              </div>
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
-                Refer Now
-              </Button>
-            </div>
-          </Card>
         </div>
       </div>
     </div>
