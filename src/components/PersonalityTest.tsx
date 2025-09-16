@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
+import { personalityTestService, TestData, TestResult } from "../services/personalityTestService";
 
 interface Question {
   question_no: number;
@@ -25,13 +26,14 @@ interface TestData {
 }
 
 interface PersonalityTestProps {
-  onTestComplete: (results: any) => void;
+  onTestComplete: (results: TestResult) => void;
   onBack: () => void;
+  userId?: string;
 }
 
-export default function PersonalityTest({ onTestComplete, onBack }: PersonalityTestProps) {
+export default function PersonalityTest({ onTestComplete, onBack, userId: propUserId }: PersonalityTestProps) {
   const [step, setStep] = useState<'setup' | 'test' | 'loading'>('setup');
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState(propUserId || '');
   const [selectedTrait, setSelectedTrait] = useState('');
   const [testData, setTestData] = useState<TestData | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -54,18 +56,13 @@ export default function PersonalityTest({ onTestComplete, onBack }: PersonalityT
     
     setStep('loading');
     try {
-      const response = await fetch('https://projekanda.top/generate_test', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          trait: selectedTrait
-        })
-      });
-
-      if (response.ok) {
+      console.log('Generating test for:', { userId, selectedTrait });
+      const success = await personalityTestService.generateTest(userId, selectedTrait);
+      console.log('Generate test success:', success);
+      
+      if (success) {
+        // Wait a moment for the test to be generated
+        await new Promise(resolve => setTimeout(resolve, 2000));
         // After generating test, fetch the questions
         await fetchQuestions();
       } else {
@@ -80,11 +77,10 @@ export default function PersonalityTest({ onTestComplete, onBack }: PersonalityT
 
   const fetchQuestions = async () => {
     try {
-      const response = await fetch(`https://projekanda.top/get_mcqs/${userId}`);
-      const data = await response.json();
+      const data = await personalityTestService.getTestQuestions(userId);
       
-      if (data && data.length > 0) {
-        setTestData(data[0]); // Take the first test data
+      if (data) {
+        setTestData(data);
         setStep('test');
       } else {
         console.error('No test data found');
@@ -116,26 +112,32 @@ export default function PersonalityTest({ onTestComplete, onBack }: PersonalityT
   };
 
   const submitAnswers = async () => {
+    if (!testData) return;
+    
+    console.log('Submitting test with data:', {
+      userId,
+      selectedTrait,
+      answers,
+      testName: testData.test_name
+    });
+    
     setIsSubmitting(true);
     try {
-      const response = await fetch('https://projekanda.top/submit_answers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: userId,
-          trait: selectedTrait,
-          answers: answers,
-          test_name: testData?.test_name
-        })
-      });
+      const result = await personalityTestService.submitAnswers(
+        userId, 
+        selectedTrait, 
+        answers, 
+        testData.test_name
+      );
 
-      if (response.ok) {
-        const results = await response.json();
-        onTestComplete(results);
+      console.log('Submit answers result:', result);
+
+      if (result) {
+        console.log('Test result received:', result);
+        console.log('Calling onTestComplete with result:', result);
+        onTestComplete(result);
       } else {
-        console.error('Failed to submit answers');
+        console.error('Failed to submit answers - no result returned');
       }
     } catch (error) {
       console.error('Error submitting answers:', error);
@@ -187,6 +189,7 @@ export default function PersonalityTest({ onTestComplete, onBack }: PersonalityT
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
                 className="mt-1"
+                disabled={!!propUserId}
               />
             </div>
 

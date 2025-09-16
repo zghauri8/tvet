@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Navigation from "../components/Navigation";
 import { 
   Brain, 
   BarChart3, 
@@ -16,16 +18,11 @@ import {
   RefreshCw
 } from "lucide-react";
 import { personalityTestService, TestResult, UserStats } from "../services/personalityTestService";
-import NoTestsWarning from "./NoTestsWarning";
+import { useAuth } from "../contexts/AuthContext";
 
-
-interface PersonalityTestResultsProps {
-  userId: string;
-  onBack: () => void;
-  onRetakeTest: () => void;
-}
-
-export default function PersonalityTestResults({ userId, onBack, onRetakeTest }: PersonalityTestResultsProps) {
+export default function ResultsPage() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [results, setResults] = useState<TestResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<UserStats>({
@@ -37,12 +34,14 @@ export default function PersonalityTestResults({ userId, onBack, onRetakeTest }:
   });
 
   useEffect(() => {
-    fetchResults();
-  }, [userId]);
+    if (user) {
+      fetchResults();
+    }
+  }, [user]);
 
   const fetchResults = async () => {
     try {
-      // Fetch real test results from the service
+      const userId = user?.id || user?.email || '';
       const testResults = await personalityTestService.getUserTestHistory(userId);
       const userStats = await personalityTestService.getUserStats(userId);
       
@@ -85,36 +84,45 @@ export default function PersonalityTestResults({ userId, onBack, onRetakeTest }:
     );
   }
 
-  // Show warning if no tests have been taken
   if (results.length === 0) {
-    return <NoTestsWarning onStartTest={onRetakeTest} />;
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <div className="flex items-center justify-center h-screen">
+          <Card className="p-8 max-w-md w-full mx-4">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Brain className="w-8 h-8 text-yellow-600" />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">No Results Found</h2>
+              <p className="text-gray-600 mb-6">You haven't completed any assessment tests yet.</p>
+              <Button onClick={() => navigate('/dashboard')} className="bg-blue-600 hover:bg-blue-700">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Microsoft Outlook-style Header */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="flex items-center justify-between px-6 py-4">
+      <Navigation />
+      
+      <div className="p-6 mt-16">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-2xl font-semibold text-gray-800">Personality Assessment Results</h1>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Button onClick={onBack} className="bg-blue-600 hover:bg-blue-700">
+            <Button variant="outline" onClick={() => navigate('/dashboard')}>
               <ArrowLeft className="w-4 h-4 mr-2" />
-              View Dashboard
+              Back to Dashboard
             </Button>
-            <Button variant="outline" onClick={onRetakeTest}>
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Take New Test
-            </Button>
+            <h1 className="text-2xl font-semibold text-gray-800">Assessment Results</h1>
           </div>
         </div>
-      </div>
 
-      <div className="p-6">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <Card className="p-6">
@@ -166,64 +174,12 @@ export default function PersonalityTestResults({ userId, onBack, onRetakeTest }:
           </Card>
         </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Score Distribution Chart */}
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Score Distribution</h3>
-              <BarChart3 className="w-5 h-5 text-gray-400" />
-            </div>
-            <div className="space-y-4">
-              {results.map((result) => (
-                <div key={result.trait} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 capitalize">{result.trait.replace('_', ' ')}</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-24 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-500 h-2 rounded-full" 
-                        style={{width: `${result.score}%`}}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-medium text-gray-800 w-12">{result.score}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* Trait Analysis Chart */}
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">Trait Analysis</h3>
-              <PieChart className="w-5 h-5 text-gray-400" />
-            </div>
-            <div className="space-y-4">
-              {results.map((result) => (
-                <div key={result.trait} className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full mr-3 ${
-                      result.score >= 90 ? 'bg-green-500' :
-                      result.score >= 80 ? 'bg-blue-500' :
-                      result.score >= 70 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`}></div>
-                    <span className="text-sm text-gray-600 capitalize">{result.trait.replace('_', ' ')}</span>
-                  </div>
-                  <Badge className={getLevelColor(result.level)}>
-                    {result.level}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-
         {/* Detailed Results */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-gray-800 mb-6">Detailed Assessment Results</h3>
           <div className="space-y-6">
             {results.map((result) => (
-              <Card key={result.trait} className="p-6">
+              <Card key={`${result.trait}-${result.completed_date}`} className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <h4 className="text-lg font-semibold text-gray-800 capitalize mb-2">

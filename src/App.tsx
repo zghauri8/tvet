@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import JobsPage from "./pages/JobsPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import AboutPage from "./pages/AboutPage";
+import ResultsPage from "./pages/ResultsPage";
 import NotFound from "./pages/NotFound";
 import Setup from "./pages/Setup";
 import LoginView from "./views/LoginView";
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/jobs" element={<JobsPage />} />
             <Route path="/companies" element={<CompaniesPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/results" element={<ResultsPage />} />
             <Route path="/login" element={<LoginView />} />
             <Route path="/signup" element={<SignupView />} />
             <Route path="/dashboard" element={<DashboardView />} />
