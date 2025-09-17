@@ -52,7 +52,6 @@ export default function TVETDashboard() {
     lastTestDate: ''
   });
   const [loading, setLoading] = useState(true);
-  const [suggestedCourses, setSuggestedCourses] = useState<Array<{ id: string; title: string; description: string }>>([]);
 
   const handleLogout = () => {
     logout();
@@ -66,25 +65,6 @@ export default function TVETDashboard() {
     console.log('Test completed with results:', results);
     setTestResults(results);
     setShowTest(false);
-    // Build simple suggested courses immediately after completion
-    const recs = [
-      {
-        id: 'improve-communication',
-        title: 'Improve Communication for Teams',
-        description: 'Practice concise, structured communication and feedback loops in projects.'
-      },
-      {
-        id: 'critical-thinking',
-        title: 'Critical Thinking & Problem Solving',
-        description: 'Strengthen reasoning, pattern recognition, and decision frameworks.'
-      },
-      {
-        id: 'time-management',
-        title: 'Time Management Fundamentals',
-        description: 'Prioritize tasks, plan sprints, and reduce context switching.'
-      }
-    ];
-    setSuggestedCourses(recs);
     setActiveSidebarItem('dashboard');
     
     // Force reload stats after a short delay to ensure localStorage is updated
@@ -309,23 +289,6 @@ export default function TVETDashboard() {
             </div>
           </div>
 
-          {/* Recommended Courses (shown right after test completion) */}
-          {suggestedCourses.length > 0 && (
-            <Card className="p-6 mb-8 border-blue-200 bg-blue-50">
-              <div className="mb-4">
-                <h3 className="text-xl font-semibold text-blue-900">Recommended Courses to Improve</h3>
-                <p className="text-blue-800 text-sm">Based on your latest assessment, start with these:</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {suggestedCourses.map((c) => (
-                  <div key={c.id} className="bg-white rounded-lg p-4 border border-blue-100">
-                    <h4 className="font-semibold text-gray-800 mb-1">{c.title}</h4>
-                    <p className="text-sm text-gray-600">{c.description}</p>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
 
 
           {/* Stats Cards */}

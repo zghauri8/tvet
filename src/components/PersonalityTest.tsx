@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
-import { personalityTestService, TestData, TestResult } from "../services/personalityTestService";
+import { personalityTestService, TestResult } from "../services/personalityTestService";
 
 interface Question {
   question_no: number;
@@ -32,13 +32,14 @@ interface PersonalityTestProps {
 }
 
 export default function PersonalityTest({ onTestComplete, onBack, userId: propUserId }: PersonalityTestProps) {
-  const [step, setStep] = useState<'setup' | 'test' | 'loading'>('setup');
+  const [step, setStep] = useState<'setup' | 'test' | 'loading' | 'results'>('setup');
   const [userId, setUserId] = useState(propUserId || '');
   const [selectedTrait, setSelectedTrait] = useState('');
   const [testData, setTestData] = useState<TestData | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<{[key: number]: number}>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [testResult, setTestResult] = useState<TestResult | null>(null);
 
   const traits = [
     { value: 'leadership', label: 'Leadership' },
@@ -134,8 +135,8 @@ export default function PersonalityTest({ onTestComplete, onBack, userId: propUs
 
       if (result) {
         console.log('Test result received:', result);
-        console.log('Calling onTestComplete with result:', result);
-        onTestComplete(result);
+        setTestResult(result);
+        setStep('results');
       } else {
         console.error('Failed to submit answers - no result returned');
       }
@@ -315,6 +316,86 @@ export default function PersonalityTest({ onTestComplete, onBack, userId: propUs
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             )}
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (step === 'results' && testResult) {
+    const suggestedCourses = [
+      {
+        id: 'improve-communication',
+        title: 'Improve Communication for Teams',
+        description: 'Practice concise, structured communication and feedback loops in projects.'
+      },
+      {
+        id: 'critical-thinking',
+        title: 'Critical Thinking & Problem Solving',
+        description: 'Strengthen reasoning, pattern recognition, and decision frameworks.'
+      },
+      {
+        id: 'time-management',
+        title: 'Time Management Fundamentals',
+        description: 'Prioritize tasks, plan sprints, and reduce context switching.'
+      }
+    ];
+
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <Card className="p-8 max-w-4xl w-full">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Assessment Complete!</h1>
+            <p className="text-gray-600">Your personality assessment has been completed successfully</p>
+          </div>
+
+          {/* Test Results */}
+          <div className="bg-white rounded-lg border p-6 mb-8">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Your Results</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                <div className="text-3xl font-bold text-blue-600 mb-2">{testResult.score}%</div>
+                <div className="text-gray-600 text-sm">Overall Score</div>
+              </div>
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-2xl font-bold text-green-600 mb-2 capitalize">{selectedTrait.replace('_', ' ')}</div>
+                <div className="text-gray-600 text-sm">Assessed Trait</div>
+              </div>
+              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600 mb-2">{testData?.questions.length || 0}</div>
+                <div className="text-gray-600 text-sm">Questions Answered</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Course Recommendations */}
+          <div className="bg-blue-50 rounded-lg border border-blue-200 p-6 mb-8">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-blue-900 mb-2">Recommended Courses to Improve</h3>
+              <p className="text-blue-800 text-sm">Based on your assessment results, we recommend starting with these courses:</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {suggestedCourses.map((course) => (
+                <div key={course.id} className="bg-white rounded-lg p-4 border border-blue-100">
+                  <h4 className="font-semibold text-gray-800 mb-2">{course.title}</h4>
+                  <p className="text-sm text-gray-600">{course.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <Button
+              onClick={() => {
+                onTestComplete(testResult);
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
+            >
+              Return to Dashboard
+            </Button>
           </div>
         </Card>
       </div>
