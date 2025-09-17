@@ -1,0 +1,13 @@
+<svg width="128" height="32" viewBox="0 0 128 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="128" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1e40af"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="6" rx="6" ry="6" width="36" height="20" fill="url(#g1)"/>
+  <path d="M10 16h8M14 12v8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+  <text x="44" y="22" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#1e40af">Fit</text>
+  <text x="70" y="22" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700" fill="#3b82f6">Find</text>
+</svg>
+

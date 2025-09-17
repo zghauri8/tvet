@@ -10,7 +10,6 @@ import {
   Calendar, 
   LogOut, 
   Settings,
-  Target,
   Users,
   Gift,
   Wallet,
@@ -136,9 +135,7 @@ export default function WorkingADOFDashboard() {
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-white" />
-            </div>
+            <img src={"/src/assets/logo.svg"} alt="FitFind" className="h-8 w-auto" />
             <h1 className="text-2xl font-semibold text-gray-800">FitFind Job Search Dashboard</h1>
           </div>
           <div className="flex items-center space-x-4">

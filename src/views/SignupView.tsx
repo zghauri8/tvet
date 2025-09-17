@@ -74,7 +74,7 @@ export default function SignupView() {
         <div className="flex bg-gray-100 rounded-lg p-1">
           <button
             type="button"
-            className="flex-1 py-2 px-4 text-sm font-medium rounded-md bg-purple-600 text-white transition-colors"
+            className="flex-1 py-2 px-4 text-sm font-medium rounded-md bg-blue-600 text-white transition-colors"
           >
             Sign up
           </button>
@@ -129,7 +129,7 @@ export default function SignupView() {
                     id="name"
                     name="name"
                     type="text"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium"
                     placeholder="Your full name"
                   />
                   <ErrorMessage
@@ -150,7 +150,7 @@ export default function SignupView() {
                     id="email"
                     name="email"
                     type="email"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium"
                     placeholder="you@example.com"
                   />
                   <ErrorMessage
@@ -172,13 +172,13 @@ export default function SignupView() {
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium pr-12"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium pr-12"
                       placeholder="Create a password"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-medium text-purple-600 hover:text-purple-800 transition-colors duration-200"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200"
                     >
                       {showPassword ? "Hide" : "Show"}
                     </button>
@@ -202,7 +202,7 @@ export default function SignupView() {
                       id="confirmPassword"
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium pr-12"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-500 font-medium pr-12"
                       placeholder="Confirm your password"
                     />
                     <button
@@ -210,7 +210,7 @@ export default function SignupView() {
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-medium text-purple-600 hover:text-purple-800 transition-colors duration-200"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors duration-200"
                     >
                       {showConfirmPassword ? "Hide" : "Show"}
                     </button>
@@ -227,23 +227,23 @@ export default function SignupView() {
                     Role
                   </label>
                   <div className="space-y-2">
-                    <label className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-purple-50 hover:border-purple-300 transition-all duration-200 bg-gray-50">
+                    <label className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 bg-gray-50">
                       <Field
                         type="radio"
                         name="role"
                         value="TVET_STUDENT"
-                        className="mr-3 text-purple-600 focus:ring-purple-500"
+                        className="mr-3 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="text-sm font-semibold text-gray-900">
                         TVET STUDENT
                       </span>
                     </label>
-                    <label className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-purple-50 hover:border-purple-300 transition-all duration-200 bg-gray-50">
+                    <label className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 bg-gray-50">
                       <Field
                         type="radio"
                         name="role"
                         value="WORKING_ADOF"
-                        className="mr-3 text-purple-600 focus:ring-purple-500"
+                        className="mr-3 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="text-sm font-semibold text-gray-900">
                         WORKING ADOF
@@ -261,7 +261,7 @@ export default function SignupView() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSubmitting ? "Creating Account..." : "Create account"}
               </button>

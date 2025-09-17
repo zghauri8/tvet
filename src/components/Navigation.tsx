@@ -1,17 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Menu,
-  X,
-  Target,
-  Home,
-  Briefcase,
-  Building2,
-  Info,
-  LogOut,
-  User,
-} from "lucide-react";
+import { Menu, X, Home, Briefcase, Building2, Info, LogOut } from "lucide-react";
+import logo from "@/assets/logo.svg";
 import { useAuth } from "../contexts/AuthContext";
 
 const Navigation = () => {
@@ -40,12 +31,8 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              FitFind
-            </span>
+            <img src={logo} alt="FitFind" className="h-8 w-auto" />
+            <span className="text-xl font-bold text-primary">FitFind</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -64,19 +51,7 @@ const Navigation = () => {
                 <span>{item.name}</span>
               </button>
             ))}
-            {isAuthenticated && (
-              <button
-                onClick={() => navigate("/dashboard")}
-                className={`transition-colors duration-200 flex items-center space-x-2 px-3 py-2 rounded-md ${
-                  isActive("/dashboard")
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-primary hover:bg-primary/5"
-                }`}
-              >
-                <User className="w-4 h-4" />
-                <span>Dashboard</span>
-              </button>
-            )}
+            {/* Dashboard link moved to sidebar in dashboards */}
           </div>
 
           {/* Auth Buttons */}
@@ -144,22 +119,7 @@ const Navigation = () => {
                   <span>{item.name}</span>
                 </button>
               ))}
-              {isAuthenticated && (
-                <button
-                  onClick={() => {
-                    navigate("/dashboard");
-                    setIsMenuOpen(false);
-                  }}
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-md transition-colors duration-200 w-full text-left ${
-                    isActive("/dashboard")
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-primary hover:bg-secondary/50"
-                  }`}
-                >
-                  <User className="w-4 h-4" />
-                  <span>Dashboard</span>
-                </button>
-              )}
+              {/* Dashboard link removed from header on mobile as well */}
               <div className="flex flex-col space-y-2 mt-4 px-3">
                 {isAuthenticated ? (
                   <>

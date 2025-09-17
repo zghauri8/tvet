@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import PersonalityTest from "./PersonalityTest";
 import PersonalityTestResults from "./PersonalityTestResults";
-import ReportSection from "./ReportSection";
+// Removed inline report section usage per request
 import { personalityTestService, TestResult, UserStats } from "../services/personalityTestService";
 import { 
   User, 
@@ -22,7 +22,6 @@ import {
   Plus,
   Brain,
   BookOpen,
-  FileText,
   Play,
   CheckCircle,
   Clock,
@@ -30,7 +29,6 @@ import {
   TrendingUp,
   Star,
   BarChart3,
-  PieChart,
   Activity,
   Zap,
   Bookmark,
@@ -45,7 +43,7 @@ export default function TVETDashboard() {
   const navigate = useNavigate();
   const [showTest, setShowTest] = useState(false);
   const [testResults, setTestResults] = useState<TestResult | null>(null);
-  const [activeSidebarItem, setActiveSidebarItem] = useState<'personality' | 'courses' | 'report'>('personality');
+  const [activeSidebarItem, setActiveSidebarItem] = useState<'dashboard' | 'personality' | 'courses'>('dashboard');
   const [userStats, setUserStats] = useState<UserStats>({
     totalTests: 0,
     averageScore: 0,
@@ -54,6 +52,7 @@ export default function TVETDashboard() {
     lastTestDate: ''
   });
   const [loading, setLoading] = useState(true);
+  const [suggestedCourses, setSuggestedCourses] = useState<Array<{ id: string; title: string; description: string }>>([]);
 
   const handleLogout = () => {
     logout();
@@ -67,6 +66,26 @@ export default function TVETDashboard() {
     console.log('Test completed with results:', results);
     setTestResults(results);
     setShowTest(false);
+    // Build simple suggested courses immediately after completion
+    const recs = [
+      {
+        id: 'improve-communication',
+        title: 'Improve Communication for Teams',
+        description: 'Practice concise, structured communication and feedback loops in projects.'
+      },
+      {
+        id: 'critical-thinking',
+        title: 'Critical Thinking & Problem Solving',
+        description: 'Strengthen reasoning, pattern recognition, and decision frameworks.'
+      },
+      {
+        id: 'time-management',
+        title: 'Time Management Fundamentals',
+        description: 'Prioritize tasks, plan sprints, and reduce context switching.'
+      }
+    ];
+    setSuggestedCourses(recs);
+    setActiveSidebarItem('dashboard');
     
     // Force reload stats after a short delay to ensure localStorage is updated
     setTimeout(() => {
@@ -210,16 +229,7 @@ export default function TVETDashboard() {
     );
   }
 
-  // Show personality test component if test is active
-  if (showTest) {
-    return (
-      <PersonalityTest 
-        onTestComplete={handleTestComplete}
-        onBack={handleBackToDashboard}
-        userId={user?.id || user?.email || ''}
-      />
-    );
-  }
+  // We no longer early-return; test renders inside the main content to keep sidebar visible
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -227,10 +237,8 @@ export default function TVETDashboard() {
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center space-x-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-              <Target className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-2xl font-semibold text-gray-800">FitFind Dashboard</h1>
+            <img src={"/src/assets/logo.svg"} alt="FitFind" className="h-8 w-auto" />
+            <h1 className="text-2xl font-semibold text-gray-800">Fit Find TVET</h1>
           </div>
           <div className="flex items-center space-x-4">
             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -253,11 +261,19 @@ export default function TVETDashboard() {
               <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
                 TVET Student Menu
               </div>
-              
+              <Button 
+                variant={activeSidebarItem === 'dashboard' ? 'default' : 'ghost'} 
+                className={`w-full justify-start ${activeSidebarItem === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
+                onClick={() => setActiveSidebarItem('dashboard')}
+              >
+                <Activity className="w-4 h-4 mr-3" />
+                Dashboard
+              </Button>
+
               <Button 
                 variant={activeSidebarItem === 'personality' ? 'default' : 'ghost'} 
                 className={`w-full justify-start ${activeSidebarItem === 'personality' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
-                onClick={() => setActiveSidebarItem('personality')}
+                onClick={() => { setActiveSidebarItem('personality'); setShowTest(true); }}
               >
                 <Brain className="w-4 h-4 mr-3" />
                 Personality Test
@@ -271,22 +287,13 @@ export default function TVETDashboard() {
                 <BookOpen className="w-4 h-4 mr-3" />
                 Courses
               </Button>
-              
-              <Button 
-                variant={activeSidebarItem === 'report' ? 'default' : 'ghost'} 
-                className={`w-full justify-start ${activeSidebarItem === 'report' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
-                onClick={() => setActiveSidebarItem('report')}
-              >
-                <FileText className="w-4 h-4 mr-3" />
-                Report
-              </Button>
             </nav>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 p-6">
-          {activeSidebarItem === 'personality' && (
+          {activeSidebarItem === 'dashboard' && (
             <>
           {/* Welcome Section */}
           <div className="mb-6">
@@ -301,6 +308,24 @@ export default function TVETDashboard() {
               </Button>
             </div>
           </div>
+
+          {/* Recommended Courses (shown right after test completion) */}
+          {suggestedCourses.length > 0 && (
+            <Card className="p-6 mb-8 border-blue-200 bg-blue-50">
+              <div className="mb-4">
+                <h3 className="text-xl font-semibold text-blue-900">Recommended Courses to Improve</h3>
+                <p className="text-blue-800 text-sm">Based on your latest assessment, start with these:</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {suggestedCourses.map((c) => (
+                  <div key={c.id} className="bg-white rounded-lg p-4 border border-blue-100">
+                    <h4 className="font-semibold text-gray-800 mb-1">{c.title}</h4>
+                    <p className="text-sm text-gray-600">{c.description}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
 
 
           {/* Stats Cards */}
@@ -354,7 +379,7 @@ export default function TVETDashboard() {
             </Card>
           </div>
 
-          {/* Charts Section */}
+          {/* Charts Section (AI Usage removed) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Progress Chart */}
             <Card className="p-6">
@@ -388,47 +413,6 @@ export default function TVETDashboard() {
                 </div>
               </div>
             </Card>
-
-            {/* Usage Chart */}
-            <Card className="p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">AI Usage</h3>
-                <PieChart className="w-5 h-5 text-gray-400" />
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <MessageSquare className="w-4 h-4 text-blue-500 mr-2" />
-                    <span className="text-sm text-gray-600">Chat Messages</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-800">1,250</span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Image className="w-4 h-4 text-green-500 mr-2" />
-                    <span className="text-sm text-gray-600">Image Prompts</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-800">340</span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Mic className="w-4 h-4 text-purple-500 mr-2" />
-                    <span className="text-sm text-gray-600">Voice Counts</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-800">89</span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Zap className="w-4 h-4 text-yellow-500 mr-2" />
-                    <span className="text-sm text-gray-600">AI Words</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-800">15,420</span>
-                </div>
-              </div>
-            </Card>
           </div>
 
 
@@ -450,7 +434,7 @@ export default function TVETDashboard() {
               </div>
               <Button 
                 className="bg-purple-600 hover:bg-purple-700 text-white"
-                onClick={handleStartTest}
+                onClick={() => { setActiveSidebarItem('personality'); setShowTest(true); }}
               >
                 {userStats.totalTests > 0 ? "Take New Test" : "Start Assessment"}
               </Button>
@@ -622,6 +606,24 @@ export default function TVETDashboard() {
             </>
           )}
 
+          {activeSidebarItem === 'personality' && (
+            <div className="space-y-6">
+              <div className="mb-2">
+                <h2 className="text-2xl font-semibold text-gray-800 mb-1">Personality Test</h2>
+                <p className="text-gray-600">Generate test and answer MCQs below.</p>
+              </div>
+              <Card className="p-0 overflow-hidden">
+                <div className="p-4">
+                  <PersonalityTest 
+                    onTestComplete={handleTestComplete}
+                    onBack={handleBackToDashboard}
+                    userId={user?.id || user?.email || ''}
+                  />
+                </div>
+              </Card>
+            </div>
+          )}
+
           {activeSidebarItem === 'courses' && (
             <div className="space-y-6">
               <div className="mb-6">
@@ -650,78 +652,7 @@ export default function TVETDashboard() {
             </div>
           )}
 
-          {activeSidebarItem === 'report' && (
-            <div className="space-y-6">
-              <div className="mb-6">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-2">Assessment Report</h2>
-                <p className="text-gray-600">Your personalized assessment results and insights</p>
-              </div>
-              
-              {userStats.totalTests > 0 ? (
-                <div className="space-y-6">
-                  {/* Quick Stats */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="p-6 text-center">
-                      <div className="text-3xl font-bold text-blue-600 mb-2">{userStats.averageScore}%</div>
-                      <div className="text-gray-600 text-sm">Average Score</div>
-                    </Card>
-                    <Card className="p-6 text-center">
-                      <div className="text-2xl font-bold text-gray-800 mb-2 capitalize">{userStats.topTrait.replace('_', ' ')}</div>
-                      <div className="text-gray-600 text-sm">Top Trait</div>
-                    </Card>
-                    <Card className="p-6 text-center">
-                      <div className="text-3xl font-bold text-green-600 mb-2">{userStats.totalTests}</div>
-                      <div className="text-gray-600 text-sm">Tests Completed</div>
-                    </Card>
-                  </div>
-
-                  {/* Latest Results */}
-                  <Card className="p-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Latest Assessment</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-600">Assessment Date:</span>
-                        <span className="font-medium">{userStats.lastTestDate}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-600">Score:</span>
-                        <span className="font-medium text-blue-600">{userStats.averageScore}%</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-600">Strongest Area:</span>
-                        <span className="font-medium capitalize">{userStats.topTrait.replace('_', ' ')}</span>
-                      </div>
-                    </div>
-                    <div className="mt-6 pt-4 border-t border-gray-200">
-                      <Button 
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                        onClick={() => navigate("/results")}
-                      >
-                        View Detailed Report
-                      </Button>
-                    </div>
-                  </Card>
-                </div>
-              ) : (
-                <Card className="p-8 text-center">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <FileText className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">No Assessment Data</h3>
-                  <p className="text-gray-600 mb-4">
-                    Complete your first personality assessment to see your personalized report.
-                  </p>
-                  <Button 
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={handleStartTest}
-                  >
-                    <Brain className="w-4 h-4 mr-2" />
-                    Take Assessment
-                  </Button>
-                </Card>
-              )}
-            </div>
-          )}
+          {/* Report section removed per request */}
 
         </div>
       </div>
