@@ -224,7 +224,7 @@ const Index = () => {
               Success Stories
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Real people, real results. See how FitFind has transformed careers.
+              Real people, real results. See how our platform has transformed careers.
             </p>
           </div>
 
@@ -235,7 +235,7 @@ const Index = () => {
                 role: "Software Engineer",
                 company: "TechCorp",
                 image: "SJ",
-                story: "Found my dream job in just 2 weeks using FitFind's AI matching system."
+                story: "Found my dream job in just 2 weeks using our AI matching system."
               },
               {
                 name: "Michael Chen",
@@ -249,7 +249,7 @@ const Index = () => {
                 role: "Data Analyst",
                 company: "DataFlow Inc",
                 image: "ER",
-                story: "From TVET student to data analyst - FitFind made it possible."
+                story: "From TVET student to data analyst - our platform made it possible."
               }
             ].map((story, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -274,7 +274,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              How FitFind Works
+              How Our Platform Works
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Get started in just 3 simple steps
@@ -347,7 +347,7 @@ const Index = () => {
         </div>
       </section>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in-up {
           from {
             opacity: 0;

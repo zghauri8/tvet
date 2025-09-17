@@ -31,8 +31,7 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <img src={logo} alt="FitFind" className="h-8 w-auto" />
-            <span className="text-xl font-bold text-primary">FitFind</span>
+            <img src={logo} alt="Logo" className="h-8 w-auto" />
           </div>
 
           {/* Desktop Navigation */}

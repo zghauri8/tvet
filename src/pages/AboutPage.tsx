@@ -149,7 +149,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold mb-6">
-              About FitFind
+              About Our Platform
             </h1>
             <p className="text-xl mb-8 text-blue-100">
               We're revolutionizing career matching through AI-powered technology, 
@@ -254,7 +254,7 @@ const AboutPage = () => {
               Our Values
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The principles that guide everything we do at FitFind
+              The principles that guide everything we do
             </p>
           </div>
 
@@ -284,7 +284,7 @@ const AboutPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              Why Choose FitFind?
+              Why Choose Our Platform?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Discover what makes us the leading career matching platform
@@ -324,7 +324,7 @@ const AboutPage = () => {
               Meet Our Team
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The passionate individuals behind FitFind's success
+              The passionate individuals behind our success
             </p>
           </div>
 
@@ -360,7 +360,7 @@ const AboutPage = () => {
               Our Journey
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Key milestones in FitFind's growth and development
+              Key milestones in our growth and development
             </p>
           </div>
 
@@ -393,7 +393,7 @@ const AboutPage = () => {
             Ready to Transform Your Career?
           </h2>
           <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
-            Join thousands of professionals who have discovered their perfect career path with FitFind. 
+            Join thousands of professionals who have discovered their perfect career path with our platform. 
             Start your journey today and unlock your true potential.
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
