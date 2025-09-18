@@ -94,9 +94,9 @@ export default function EmployeeFiltering({ onBack, onCandidateSelected }: Emplo
   const [jobs, setJobs] = useState<JobPosition[]>([]);
   const [reports, setReports] = useState<ReportData[]>([]);
   const [filteredCandidates, setFilteredCandidates] = useState<FilteredCandidate[]>([]);
-  const [selectedJob, setSelectedJob] = useState<string>('');
+  const [selectedJob, setSelectedJob] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<string>('');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
   const [isFiltering, setIsFiltering] = useState(false);
 
   useEffect(() => {
@@ -261,11 +261,11 @@ export default function EmployeeFiltering({ onBack, onCandidateSelected }: Emplo
   };
 
   const filteredResults = filteredCandidates.filter(candidate => {
-    const matchesJob = !selectedJob || candidate.job.id === selectedJob;
+    const matchesJob = !selectedJob || selectedJob === 'all' || candidate.job.id === selectedJob;
     const matchesSearch = !searchTerm || 
       candidate.cv.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       candidate.cv.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !filterCategory || candidate.category === filterCategory;
+    const matchesCategory = !filterCategory || filterCategory === 'all' || candidate.category === filterCategory;
     
     return matchesJob && matchesSearch && matchesCategory;
   });
@@ -308,7 +308,7 @@ export default function EmployeeFiltering({ onBack, onCandidateSelected }: Emplo
                 <SelectValue placeholder="All jobs" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All jobs</SelectItem>
+                <SelectItem value="all">All jobs</SelectItem>
                 {jobs.map((job) => (
                   <SelectItem key={job.id} value={job.id}>
                     {job.title} - {job.company}
@@ -325,7 +325,7 @@ export default function EmployeeFiltering({ onBack, onCandidateSelected }: Emplo
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All categories</SelectItem>
+                <SelectItem value="all">All categories</SelectItem>
                 <SelectItem value="high_potential">High Potential</SelectItem>
                 <SelectItem value="good_fit">Good Fit</SelectItem>
                 <SelectItem value="needs_development">Needs Development</SelectItem>

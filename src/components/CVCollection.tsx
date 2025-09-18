@@ -19,7 +19,8 @@ import {
   Eye,
   Trash2,
   Plus,
-  Search
+  Search,
+  X
 } from "lucide-react";
 
 interface JobPosition {
@@ -60,12 +61,13 @@ interface CVData {
 interface CVCollectionProps {
   onBack: () => void;
   onCVSelected: (cv: CVData) => void;
+  refreshTrigger?: number; // Add refresh trigger prop
 }
 
-export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps) {
+export default function CVCollection({ onBack, onCVSelected, refreshTrigger }: CVCollectionProps) {
   const [jobs, setJobs] = useState<JobPosition[]>([]);
   const [cvs, setCvs] = useState<CVData[]>([]);
-  const [selectedJob, setSelectedJob] = useState<string>('');
+  const [selectedJob, setSelectedJob] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [newCV, setNewCV] = useState<Partial<CVData>>({
@@ -90,16 +92,110 @@ export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps
   useEffect(() => {
     loadJobs();
     loadCVs();
+    console.log('CVCollection: Loading data...');
+  }, []);
+
+  // Reload data when refreshTrigger changes
+  useEffect(() => {
+    if (refreshTrigger) {
+      loadJobs();
+      loadCVs();
+      console.log('CVCollection: Refreshing data due to trigger');
+    }
+  }, [refreshTrigger]);
+
+  // Reload data when component becomes visible
+  useEffect(() => {
+    const handleFocus = () => {
+      loadJobs();
+      loadCVs();
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   const loadJobs = () => {
     const storedJobs = JSON.parse(localStorage.getItem('adof_jobs') || '[]');
+    console.log('CVCollection: Loaded jobs:', storedJobs);
     setJobs(storedJobs);
   };
 
   const loadCVs = () => {
     const storedCVs = JSON.parse(localStorage.getItem('adof_cvs') || '[]');
+    console.log('CVCollection: Loaded CVs:', storedCVs);
     setCvs(storedCVs);
+  };
+
+  const addSampleData = () => {
+    console.log('Adding sample data...');
+    
+    // Add sample job if none exist
+    if (jobs.length === 0) {
+      const sampleJob = {
+        id: 'sample_job_1',
+        title: 'Software Engineer',
+        company: 'TechCorp Solutions',
+        location: 'New York, NY',
+        type: 'Full-time',
+        salary: '$80,000 - $100,000',
+        description: 'We are looking for a skilled software engineer to join our team.',
+        requirements: ['Bachelor\'s degree in Computer Science', '3+ years experience', 'Strong problem-solving skills'],
+        skills: ['JavaScript', 'React', 'Node.js', 'Python', 'SQL'],
+        experience: '3-5 years',
+        education: 'Bachelor\'s degree in Computer Science or related field'
+      };
+      
+      const existingJobs = JSON.parse(localStorage.getItem('adof_jobs') || '[]');
+      existingJobs.push(sampleJob);
+      localStorage.setItem('adof_jobs', JSON.stringify(existingJobs));
+      setJobs(existingJobs);
+      console.log('Added sample job:', sampleJob);
+    }
+
+    // Add sample CV if none exist
+    if (cvs.length === 0) {
+      const sampleCV = {
+        id: 'sample_cv_1',
+        jobId: jobs.length > 0 ? jobs[0].id : 'sample_job_1', // Use existing job ID if available
+        applicantName: 'John Doe',
+        email: 'john.doe@email.com',
+        phone: '+1 (555) 123-4567',
+        location: 'New York, NY',
+        experience: '4 years of software development experience',
+        education: 'Bachelor\'s in Computer Science from NYU',
+        skills: ['JavaScript', 'React', 'Node.js', 'Python', 'SQL', 'Git'],
+        summary: 'Experienced software engineer with a passion for creating efficient and scalable applications.',
+        workHistory: [
+          {
+            company: 'TechStart Inc',
+            position: 'Senior Software Engineer',
+            duration: '2022 - Present',
+            description: 'Led development of microservices architecture and mentored junior developers.'
+          },
+          {
+            company: 'WebSolutions Ltd',
+            position: 'Software Engineer',
+            duration: '2020 - 2022',
+            description: 'Developed full-stack web applications using React and Node.js.'
+          }
+        ],
+        uploadedAt: new Date().toISOString(),
+        status: 'pending'
+      };
+      
+      const existingCVs = JSON.parse(localStorage.getItem('adof_cvs') || '[]');
+      existingCVs.push(sampleCV);
+      localStorage.setItem('adof_cvs', JSON.stringify(existingCVs));
+      setCvs(existingCVs);
+      console.log('Added sample CV:', sampleCV);
+    }
+    
+    // Force refresh
+    setTimeout(() => {
+      loadJobs();
+      loadCVs();
+    }, 100);
   };
 
   const addSkill = () => {
@@ -191,7 +287,7 @@ export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps
   };
 
   const filteredCVs = cvs.filter(cv => {
-    const matchesJob = !selectedJob || cv.jobId === selectedJob;
+    const matchesJob = !selectedJob || selectedJob === 'all' || cv.jobId === selectedJob;
     const matchesSearch = !searchTerm || 
       cv.applicantName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cv.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -200,11 +296,42 @@ export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps
 
   const selectedJobData = jobs.find(job => job.id === selectedJob);
 
+  console.log('CVCollection: Rendering with jobs:', jobs.length, 'cvs:', cvs.length);
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-2">Collect CV</h2>
         <p className="text-gray-600">Manage CVs from job applicants and track their progress</p>
+        
+        {/* Debug Info */}
+        <div className="mt-4 p-3 bg-gray-100 rounded text-sm">
+          <strong>Debug Info:</strong> Jobs: {jobs.length}, CVs: {cvs.length}
+          <br />
+          <strong>Component Status:</strong> CVCollection is rendering properly!
+          <br />
+          <button 
+            onClick={() => {
+              console.log('Jobs in localStorage:', JSON.parse(localStorage.getItem('adof_jobs') || '[]'));
+              console.log('CVs in localStorage:', JSON.parse(localStorage.getItem('adof_cvs') || '[]'));
+            }}
+            className="text-blue-600 underline mr-4"
+          >
+            Log localStorage data
+          </button>
+          <button 
+            onClick={() => {
+              localStorage.removeItem('adof_jobs');
+              localStorage.removeItem('adof_cvs');
+              loadJobs();
+              loadCVs();
+              console.log('Cleared localStorage');
+            }}
+            className="text-red-600 underline"
+          >
+            Clear localStorage
+          </button>
+        </div>
       </div>
 
       {/* Filters and Actions */}
@@ -230,7 +357,7 @@ export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps
               <SelectValue placeholder="All jobs" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All jobs</SelectItem>
+              <SelectItem value="all">All jobs</SelectItem>
               {jobs.map((job) => (
                 <SelectItem key={job.id} value={job.id}>
                   {job.title} - {job.company}
@@ -240,7 +367,46 @@ export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps
           </Select>
         </div>
 
-        <div className="flex items-end">
+        <div className="flex items-end space-x-2">
+          <Button 
+            onClick={() => {
+              loadJobs();
+              loadCVs();
+              console.log('Manual refresh triggered');
+            }}
+            variant="outline"
+          >
+            <Search className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
+            <Button 
+              onClick={() => {
+                addSampleData();
+                console.log('Adding sample data from header...');
+              }}
+              variant="outline"
+              className="bg-green-100 text-green-800 hover:bg-green-200"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Sample Data
+            </Button>
+            <Button 
+              onClick={() => {
+                addSampleData();
+                // Auto-select the first CV after adding sample data
+                setTimeout(() => {
+                  const cvs = JSON.parse(localStorage.getItem('adof_cvs') || '[]');
+                  const jobs = JSON.parse(localStorage.getItem('adof_jobs') || '[]');
+                  if (cvs.length > 0 && jobs.length > 0) {
+                    onCVSelected(cvs[0]);
+                  }
+                }, 500);
+              }}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              <Brain className="w-4 h-4 mr-2" />
+              Quick Test
+            </Button>
           <Button 
             onClick={() => setShowAddForm(true)}
             className="bg-blue-600 hover:bg-blue-700"
@@ -350,12 +516,55 @@ export default function CVCollection({ onBack, onCVSelected }: CVCollectionProps
           <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-800 mb-2">No CVs Found</h3>
           <p className="text-gray-600 mb-4">
-            {selectedJob ? 'No CVs found for the selected job.' : 'No CVs have been collected yet.'}
+            {jobs.length === 0 
+              ? 'No jobs have been created yet. Create a job first to collect CVs.' 
+              : selectedJob && selectedJob !== 'all'
+                ? 'No CVs found for the selected job.' 
+                : 'No CVs have been collected yet.'
+            }
           </p>
-          <Button onClick={() => setShowAddForm(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add First CV
-          </Button>
+          <div className="flex justify-center space-x-4">
+            {jobs.length === 0 && (
+              <Button 
+                onClick={() => window.location.href = '/dashboard'}
+                variant="outline"
+              >
+                Create Job First
+              </Button>
+            )}
+            <Button 
+              onClick={() => {
+                addSampleData();
+                console.log('Adding sample data...');
+              }} 
+              variant="outline"
+              className="bg-green-100 text-green-800 hover:bg-green-200"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Sample Data
+            </Button>
+            <Button 
+              onClick={() => {
+                addSampleData();
+                // Auto-select the first CV after adding sample data
+                setTimeout(() => {
+                  const cvs = JSON.parse(localStorage.getItem('adof_cvs') || '[]');
+                  const jobs = JSON.parse(localStorage.getItem('adof_jobs') || '[]');
+                  if (cvs.length > 0 && jobs.length > 0) {
+                    onCVSelected(cvs[0]);
+                  }
+                }, 500);
+              }}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              <Brain className="w-4 h-4 mr-2" />
+              Quick Test
+            </Button>
+            <Button onClick={() => setShowAddForm(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add CV
+            </Button>
+          </div>
         </Card>
       )}
 

@@ -41,7 +41,8 @@ import {
   Image,
   Mic,
   Star,
-  ArrowRight
+  ArrowRight,
+  X
 } from "lucide-react";
 
 interface JobPosition {
@@ -103,6 +104,7 @@ export default function WorkingADOFDashboard() {
     testsCompleted: 0,
     recommendations: 0
   });
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleLogout = () => {
     logout();
@@ -452,6 +454,7 @@ export default function WorkingADOFDashboard() {
               onJobCreated={(job: any) => {
                 setSelectedJob(job);
                 loadStats();
+                setRefreshTrigger(prev => prev + 1); // Trigger refresh
                 setActiveStep('cv_collection');
               }}
               onBack={() => setActiveStep('dashboard')}
@@ -460,6 +463,8 @@ export default function WorkingADOFDashboard() {
 
           {activeStep === 'cv_collection' && (
             <CVCollection 
+              key={activeStep} // Force re-render when step changes
+              refreshTrigger={refreshTrigger}
               onBack={() => setActiveStep('dashboard')}
               onCVSelected={(cv) => {
                 setSelectedCV(cv);
@@ -470,31 +475,151 @@ export default function WorkingADOFDashboard() {
             />
           )}
 
-          {activeStep === 'personality_test' && selectedCV && selectedJob && (
-            <ADOFPersonalityTest 
-              cv={selectedCV}
-              job={selectedJob}
-              onTestComplete={(cv, result) => {
-                setTestResult(result);
-                loadStats();
-                setActiveStep('personality_report');
-              }}
-              onBack={() => setActiveStep('cv_collection')}
-            />
+          {activeStep === 'personality_test' && (
+            selectedCV && selectedJob ? (
+              <ADOFPersonalityTest 
+                cv={selectedCV}
+                job={selectedJob}
+                onTestComplete={(cv, result) => {
+                  setTestResult(result);
+                  loadStats();
+                  setActiveStep('personality_report');
+                }}
+                onBack={() => setActiveStep('cv_collection')}
+              />
+            ) : (
+              <div className="max-w-4xl mx-auto p-6">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-2">Personality Test</h2>
+                  <p className="text-gray-600">Please complete the previous steps to access the personality test</p>
+                </div>
+                <Card className="p-8 text-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Brain className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">No Test Available</h3>
+                  <p className="text-gray-600 mb-4">
+                    To take a personality test, you need to:
+                  </p>
+                  <div className="text-left max-w-md mx-auto mb-6">
+                    <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
+                      <li>Create a job position</li>
+                      <li>Collect CVs from applicants</li>
+                      <li>Select a CV to test</li>
+                    </ol>
+                  </div>
+                  <div className="flex justify-center space-x-4">
+                    <Button onClick={() => setActiveStep('job_entry')} variant="outline">
+                      Create Job
+                    </Button>
+                    <Button onClick={() => setActiveStep('cv_collection')}>
+                      Collect CVs
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        // Add sample data and auto-select CV for quick test
+                        const sampleJob = {
+                          id: 'sample_job_1',
+                          title: 'Software Engineer',
+                          company: 'TechCorp Solutions',
+                          location: 'New York, NY',
+                          type: 'Full-time',
+                          salary: '$80,000 - $100,000',
+                          description: 'We are looking for a skilled software engineer to join our team.',
+                          requirements: ['Bachelor\'s degree in Computer Science', '3+ years experience', 'Strong problem-solving skills'],
+                          skills: ['JavaScript', 'React', 'Node.js', 'Python', 'SQL'],
+                          experience: '3-5 years',
+                          education: 'Bachelor\'s degree in Computer Science or related field'
+                        };
+                        
+                        const sampleCV = {
+                          id: 'sample_cv_1',
+                          jobId: 'sample_job_1',
+                          applicantName: 'John Doe',
+                          email: 'john.doe@email.com',
+                          phone: '+1 (555) 123-4567',
+                          location: 'New York, NY',
+                          experience: '4 years of software development experience',
+                          education: 'Bachelor\'s in Computer Science from NYU',
+                          skills: ['JavaScript', 'React', 'Node.js', 'Python', 'SQL', 'Git'],
+                          summary: 'Experienced software engineer with a passion for creating efficient and scalable applications.',
+                          workHistory: [
+                            {
+                              company: 'TechStart Inc',
+                              position: 'Senior Software Engineer',
+                              duration: '2022 - Present',
+                              description: 'Led development of microservices architecture and mentored junior developers.'
+                            }
+                          ],
+                          uploadedAt: new Date().toISOString(),
+                          status: 'pending'
+                        };
+                        
+                        // Store sample data
+                        localStorage.setItem('adof_jobs', JSON.stringify([sampleJob]));
+                        localStorage.setItem('adof_cvs', JSON.stringify([sampleCV]));
+                        
+                        // Set selected CV and job
+                        setSelectedJob(sampleJob);
+                        setSelectedCV(sampleCV);
+                        loadStats();
+                      }}
+                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      <Brain className="w-4 h-4 mr-2" />
+                      Quick Test
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            )
           )}
 
-          {activeStep === 'personality_report' && selectedCV && selectedJob && testResult && (
-            <PersonalityReport 
-              cv={selectedCV}
-              job={selectedJob}
-              testResult={testResult}
-              onReportGenerated={(cv, report) => {
-                setReportData(report);
-                loadStats();
-                setActiveStep('employee_filtering');
-              }}
-              onBack={() => setActiveStep('personality_test')}
-            />
+          {activeStep === 'personality_report' && (
+            selectedCV && selectedJob && testResult ? (
+              <PersonalityReport 
+                cv={selectedCV}
+                job={selectedJob}
+                testResult={testResult}
+                onReportGenerated={(cv, report) => {
+                  setReportData(report);
+                  loadStats();
+                  setActiveStep('employee_filtering');
+                }}
+                onBack={() => setActiveStep('personality_test')}
+              />
+            ) : (
+              <div className="max-w-4xl mx-auto p-6">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-2">Personality Report</h2>
+                  <p className="text-gray-600">Generate personality reports for tested candidates</p>
+                </div>
+                <Card className="p-8 text-center">
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FileText className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">No Report Available</h3>
+                  <p className="text-gray-600 mb-4">
+                    To generate a personality report, you need to complete a personality test first.
+                  </p>
+                  <div className="text-left max-w-md mx-auto mb-6">
+                    <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
+                      <li>Complete a personality test</li>
+                      <li>View test results</li>
+                      <li>Generate comprehensive report</li>
+                    </ol>
+                  </div>
+                  <div className="flex justify-center space-x-4">
+                    <Button onClick={() => setActiveStep('personality_test')} variant="outline">
+                      Take Test
+                    </Button>
+                    <Button onClick={() => setActiveStep('cv_collection')}>
+                      Select CV
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            )
           )}
 
           {activeStep === 'employee_filtering' && (
@@ -507,15 +632,48 @@ export default function WorkingADOFDashboard() {
             />
           )}
 
-          {activeStep === 'recommend_reject' && selectedCandidate && (
-            <RecommendReject 
-              candidate={selectedCandidate}
-              onBack={() => setActiveStep('employee_filtering')}
-              onDecisionMade={(decision) => {
-                loadStats();
-                setActiveStep('dashboard');
-              }}
-            />
+          {activeStep === 'recommend_reject' && (
+            selectedCandidate ? (
+              <RecommendReject 
+                candidate={selectedCandidate}
+                onBack={() => setActiveStep('employee_filtering')}
+                onDecisionMade={(decision) => {
+                  loadStats();
+                  setActiveStep('dashboard');
+                }}
+              />
+            ) : (
+              <div className="max-w-4xl mx-auto p-6">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-800 mb-2">Recommend or Reject</h2>
+                  <p className="text-gray-600">Make final hiring decisions for filtered candidates</p>
+                </div>
+                <Card className="p-8 text-center">
+                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-8 h-8 text-yellow-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">No Candidate Selected</h3>
+                  <p className="text-gray-600 mb-4">
+                    To make hiring decisions, you need to filter candidates first.
+                  </p>
+                  <div className="text-left max-w-md mx-auto mb-6">
+                    <ol className="list-decimal list-inside space-y-2 text-sm text-gray-600">
+                      <li>Filter candidates based on assessments</li>
+                      <li>Review filtered results</li>
+                      <li>Select a candidate for decision</li>
+                    </ol>
+                  </div>
+                  <div className="flex justify-center space-x-4">
+                    <Button onClick={() => setActiveStep('employee_filtering')} variant="outline">
+                      Filter Candidates
+                    </Button>
+                    <Button onClick={() => setActiveStep('personality_report')}>
+                      Generate Reports
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            )
           )}
 
         </div>
