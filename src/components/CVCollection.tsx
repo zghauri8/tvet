@@ -20,7 +20,8 @@ import {
   Trash2,
   Plus,
   Search,
-  X
+  X,
+  Brain
 } from "lucide-react";
 
 interface JobPosition {
@@ -65,6 +66,8 @@ interface CVCollectionProps {
 }
 
 export default function CVCollection({ onBack, onCVSelected, refreshTrigger }: CVCollectionProps) {
+  console.log('CVCollection: Component is rendering with props:', { onBack, onCVSelected, refreshTrigger });
+  
   const [jobs, setJobs] = useState<JobPosition[]>([]);
   const [cvs, setCvs] = useState<CVData[]>([]);
   const [selectedJob, setSelectedJob] = useState<string>('all');
@@ -298,40 +301,28 @@ export default function CVCollection({ onBack, onCVSelected, refreshTrigger }: C
 
   console.log('CVCollection: Rendering with jobs:', jobs.length, 'cvs:', cvs.length);
 
+  // Add error boundary and loading state
+  if (jobs === undefined || cvs === undefined) {
+    return (
+      <div className="max-w-6xl mx-auto p-6">
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">Loading CV Collection</h2>
+          <p className="text-gray-600">Please wait while we load the data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-2">Collect CV</h2>
         <p className="text-gray-600">Manage CVs from job applicants and track their progress</p>
         
-        {/* Debug Info */}
-        <div className="mt-4 p-3 bg-gray-100 rounded text-sm">
-          <strong>Debug Info:</strong> Jobs: {jobs.length}, CVs: {cvs.length}
-          <br />
-          <strong>Component Status:</strong> CVCollection is rendering properly!
-          <br />
-          <button 
-            onClick={() => {
-              console.log('Jobs in localStorage:', JSON.parse(localStorage.getItem('adof_jobs') || '[]'));
-              console.log('CVs in localStorage:', JSON.parse(localStorage.getItem('adof_cvs') || '[]'));
-            }}
-            className="text-blue-600 underline mr-4"
-          >
-            Log localStorage data
-          </button>
-          <button 
-            onClick={() => {
-              localStorage.removeItem('adof_jobs');
-              localStorage.removeItem('adof_cvs');
-              loadJobs();
-              loadCVs();
-              console.log('Cleared localStorage');
-            }}
-            className="text-red-600 underline"
-          >
-            Clear localStorage
-          </button>
-        </div>
+        
       </div>
 
       {/* Filters and Actions */}
@@ -368,27 +359,16 @@ export default function CVCollection({ onBack, onCVSelected, refreshTrigger }: C
         </div>
 
         <div className="flex items-end space-x-2">
-          <Button 
-            onClick={() => {
-              loadJobs();
-              loadCVs();
-              console.log('Manual refresh triggered');
-            }}
-            variant="outline"
-          >
-            <Search className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
             <Button 
               onClick={() => {
-                addSampleData();
-                console.log('Adding sample data from header...');
+                loadJobs();
+                loadCVs();
+                console.log('Manual refresh triggered');
               }}
               variant="outline"
-              className="bg-green-100 text-green-800 hover:bg-green-200"
             >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Sample Data
+              <Search className="w-4 h-4 mr-2" />
+              Refresh
             </Button>
             <Button 
               onClick={() => {
@@ -532,34 +512,6 @@ export default function CVCollection({ onBack, onCVSelected, refreshTrigger }: C
                 Create Job First
               </Button>
             )}
-            <Button 
-              onClick={() => {
-                addSampleData();
-                console.log('Adding sample data...');
-              }} 
-              variant="outline"
-              className="bg-green-100 text-green-800 hover:bg-green-200"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Sample Data
-            </Button>
-            <Button 
-              onClick={() => {
-                addSampleData();
-                // Auto-select the first CV after adding sample data
-                setTimeout(() => {
-                  const cvs = JSON.parse(localStorage.getItem('adof_cvs') || '[]');
-                  const jobs = JSON.parse(localStorage.getItem('adof_jobs') || '[]');
-                  if (cvs.length > 0 && jobs.length > 0) {
-                    onCVSelected(cvs[0]);
-                  }
-                }, 500);
-              }}
-              className="bg-purple-600 hover:bg-purple-700 text-white"
-            >
-              <Brain className="w-4 h-4 mr-2" />
-              Quick Test
-            </Button>
             <Button onClick={() => setShowAddForm(true)}>
               <Plus className="w-4 h-4 mr-2" />
               Add CV
@@ -567,6 +519,7 @@ export default function CVCollection({ onBack, onCVSelected, refreshTrigger }: C
           </div>
         </Card>
       )}
+
 
       {/* Add CV Form Modal */}
       {showAddForm && (

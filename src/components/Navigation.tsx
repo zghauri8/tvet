@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Home, Briefcase, Building2, Info, LogOut } from "lucide-react";
+import { Menu, X, Home, Briefcase, Building2, Info, LogOut, LayoutDashboard } from "lucide-react";
 import logo from "@/assets/logo.svg";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -21,6 +21,7 @@ const Navigation = () => {
     { name: "Jobs", href: "/jobs", icon: Briefcase },
     { name: "Companies", href: "/companies", icon: Building2 },
     { name: "About", href: "/about", icon: Info },
+    ...(isAuthenticated ? [{ name: "Dashboard", href: "/dashboard", icon: LayoutDashboard }] : []),
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -30,8 +31,9 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <img src={logo} alt="Logo" className="h-8 w-8" />
+          <div className="flex items-center space-x-3">
+            <img src={logo} alt="FitFind Logo" className="h-8 w-8" />
+            <span className="text-xl font-bold text-primary">FitFind</span>
           </div>
 
           {/* Desktop Navigation */}
