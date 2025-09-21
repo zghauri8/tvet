@@ -1,8 +1,8 @@
 [build]
-  nixPkgs = ['nodejs-20.x', 'nodePackages.pnpm']
+  nixPkgs = ['nodejs-20', 'nodePackages.pnpm']
 
 [phases.setup]
-  nixPkgs = ['nodejs-20.x', 'nodePackages.pnpm']
+  nixPkgs = ['nodejs-20', 'nodePackages.pnpm']
 
 [phases.install]
   cmds = ["npm install"]
