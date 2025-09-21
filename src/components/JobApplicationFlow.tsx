@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { jobService, type Job, type Application } from '@/services/jobService';
+import { jobService, type Job, type Application } from '@/services/job-service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -20,6 +20,8 @@ interface TestResults {
   overallScore: number;
   traits: Record<string, number>;
   recommendations: string[];
+  feedback?: string;
+  isEligible?: boolean;
 }
 
 interface ExperienceType {
@@ -149,7 +151,7 @@ export default function JobApplicationFlow({ job, onComplete, onBack }: JobAppli
       // Automatically proceed to the test step after successful upload
       setCurrentStep('test');
       
-      // If you want to show a success message before proceeding to test:
+      // Show success message
       toast({
         title: 'Resume uploaded successfully!',
         description: 'Please complete the personality assessment.',
@@ -164,7 +166,7 @@ export default function JobApplicationFlow({ job, onComplete, onBack }: JobAppli
   };
 
   // Handle test completion
-  const handleTestComplete = async (result: any) => {
+  const handleTestComplete = async (result: TestResults) => {
     if (!application || !user) return;
     
     try {
@@ -178,7 +180,7 @@ export default function JobApplicationFlow({ job, onComplete, onBack }: JobAppli
           recommendations: result.recommendations || []
         },
         feedback: result.feedback || '',
-        isEligible: result.isEligible || false
+        is_eligible_for_interview: result.isEligible || false
       });
       
       setTestResults({
