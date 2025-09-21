@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { jobService, Job } from "@/services/JobService";
+import { jobService, type Job } from "@/services/jobService";
 import { Plus, X } from "lucide-react";
 
 interface CreateJobFormProps {
