@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Plus, X, Save, Briefcase, Search, MapPin, Clock, ExternalLink } from "lucide-react";
-import { jobService, type Job } from "@/services/jobService";
+import { jobService, type Job } from "@/services";
 import { useToast } from "@/components/ui/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 

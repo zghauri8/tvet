@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2, Search, MapPin, Clock, Briefcase, Bookmark } from "lucide-react";
-import { jobService, Job } from "@/services/JobService";
+import { jobService, type Job } from "@/services";
 import { useAuth } from "@/contexts/AuthContext";
 import JobApplicationFlow from "@/components/JobApplicationFlow";
 
@@ -53,13 +53,13 @@ const JobsPage = () => {
                          job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          job.description.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesType = !selectedType || job.type === selectedType;
+    const matchesType = !selectedType || job.job_type === selectedType;
     const matchesLocation = !selectedLocation || job.location.toLowerCase().includes(selectedLocation.toLowerCase());
     
     return matchesSearch && matchesType && matchesLocation;
   });
 
-  const jobTypes = Array.from(new Set(jobs.map(job => job.type)));
+  const jobTypes = Array.from(new Set(jobs.map(job => job.job_type)));
   const locations = Array.from(new Set(jobs.map(job => job.location)));
 
   const handleApply = (job: Job) => {
@@ -204,7 +204,7 @@ const JobsPage = () => {
                   <div className="flex items-center gap-3 mb-2">
                     <h2 className="text-xl font-semibold">{job.title}</h2>
                     <Badge variant="outline" className="ml-2">
-                      {job.type}
+                      {job.job_type}
                     </Badge>
                   </div>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">

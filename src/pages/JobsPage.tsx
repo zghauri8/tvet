@@ -9,7 +9,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2, Search, MapPin, Clock, Briefcase, Bookmark, X } from "lucide-react";
-import { jobService, type Job } from "@/services/jobService";
+import { jobService, type Job } from "@/services";
 import { useAuth } from "@/contexts/AuthContext";
 import JobApplicationFlow from "@/components/JobApplicationFlow";
 
