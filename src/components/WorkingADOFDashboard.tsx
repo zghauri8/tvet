@@ -92,7 +92,7 @@ interface FilteredCandidate {
 export default function WorkingADOFDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = useState<'dashboard' | 'job_entry' | 'cv_collection' | 'personality_test' | 'personality_report' | 'employee_filtering' | 'recommend_reject'>('dashboard');
+  const [activeStep, setActiveStep] = useState<'dashboard' | 'job_entry' | 'cv_collection' | 'personality_test' | 'personality_report'>('dashboard');
   const [selectedJob, setSelectedJob] = useState<JobPosition | null>(null);
   const [selectedCV, setSelectedCV] = useState<CVData | null>(null);
   const [selectedCandidate, setSelectedCandidate] = useState<FilteredCandidate | null>(null);
@@ -258,7 +258,7 @@ export default function WorkingADOFDashboard() {
                 onClick={() => setActiveStep('job_entry')}
               >
                 <Briefcase className="w-4 h-4 mr-3" />
-                Enter Job for Apply
+                Apply for Jobs
               </Button>
               
               <Button 
@@ -286,24 +286,6 @@ export default function WorkingADOFDashboard() {
               >
                 <FileText className="w-4 h-4 mr-3" />
                 Provide Personality Report
-              </Button>
-              
-              <Button 
-                variant={activeStep === 'employee_filtering' ? 'default' : 'ghost'}
-                className={`w-full justify-start ${activeStep === 'employee_filtering' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
-                onClick={() => setActiveStep('employee_filtering')}
-              >
-                <Users className="w-4 h-4 mr-3" />
-                Filter Out Employees
-              </Button>
-              
-              <Button 
-                variant={activeStep === 'recommend_reject' ? 'default' : 'ghost'}
-                className={`w-full justify-start ${activeStep === 'recommend_reject' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
-                onClick={() => setActiveStep('recommend_reject')}
-              >
-                <CheckCircle className="w-4 h-4 mr-3" />
-                Recommend or Reject
               </Button>
             </nav>
           </div>
